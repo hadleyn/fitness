@@ -8,6 +8,6 @@ class HelloController extends Controller
 {
     public function index()
     {
-    	echo "controller time new new new test";
+		return view('helloview', ["fromcontroller" => "Hello fatso"]);
     }
 }
