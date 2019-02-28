@@ -12,9 +12,9 @@
     <label for="planType">Plan Type</label>
     <select id="planType" class="custom-select">
         <option selected></option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+        @foreach ($planTypes as $plan)
+          <option value="{{ $plan->plan_id }}">{{ $plan->description }}</option>
+        @endforeach
     </select>
   </div>
   <div class="form-group">
