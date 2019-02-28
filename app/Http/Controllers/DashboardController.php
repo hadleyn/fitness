@@ -25,9 +25,9 @@ class DashboardController extends Controller
 	{
 		//Let's get a list of existing plan types
 		$viewData['planTypes'] = PlanType::all();
-		
+
 		//Load up the new plan form
-		return view('dashboard.newplanform');
+		return view('dashboard.newplanform', $viewData);
 	}
 
 }
