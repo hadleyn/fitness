@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Plan;
 use App\User;
+use App\PlanType;
 
 class DashboardController extends Controller
 {
@@ -22,6 +23,9 @@ class DashboardController extends Controller
 
 	public function newPlan()
 	{
+		//Let's get a list of existing plan types
+		$viewData['planTypes'] = PlanType::all();
+		print_r($viewData);
 		//Load up the new plan form
 		return view('dashboard.newplanform');
 	}
