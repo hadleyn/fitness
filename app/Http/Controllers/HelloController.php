@@ -8,6 +8,6 @@ class HelloController extends Controller
 {
     public function index()
     {
-    	echo "controller time";
+    	echo "controller time new";
     }
 }
