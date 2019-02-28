@@ -16,7 +16,14 @@ class DashboardController extends Controller
 		Log::debug('User id is '.Auth::id());
 		$plans = User::find(Auth::id())->plans;
 		$viewData['plans'] = $plans;
-		return view('dashboard', $viewData);
+		return view('dashboard.dashboard', $viewData);
+	}
+
+
+	public function newPlan()
+	{
+		//Load up the new plan form
+		return view('dashboard.newplanform');
 	}
 
 }
