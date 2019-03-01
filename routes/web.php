@@ -28,4 +28,4 @@ Route::post('/dashboard/saveplan', 'DashboardController@savePlan');
 Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
 
 //Plan
-Route::get('/plan{planId}', 'PlanController@index')->name('plan');
+Route::get('/plan/{planId}', 'PlanController@index')->name('plan');
