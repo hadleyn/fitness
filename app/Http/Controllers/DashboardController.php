@@ -30,4 +30,25 @@ class DashboardController extends Controller
 		return view('dashboard.newplanform', $viewData);
 	}
 
+	public function saveNewPlan(Request $request)
+	{
+		//Validate the incoming data
+		$request->validate([
+    	'planName' => 'required|max:100',
+    	'planType' => 'required',
+			'startDate' => 'required|date'
+		]);
+
+		//We're good!
+		$plan = new Plan;
+
+    $plan->user_id = Auth::id();
+		$plan->name = $request->planName;
+		$plan->type = $request->planType;
+		$plan->start_date = $request->startDate;
+		$plan->goal_date = $request->goalDate;
+
+    $plan->save();
+	}
+
 }
