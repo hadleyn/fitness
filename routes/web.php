@@ -21,7 +21,11 @@ Route::get('/hello', 'HelloController@index');
 
 Auth::routes();
 
+//Dashboard
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
 Route::get('/dashboard/newplan', 'DashboardController@newPlan');
 Route::post('/dashboard/saveplan', 'DashboardController@savePlan');
 Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
+
+//Plan
+Route::get('/plan{planId}', 'PlanController@index')->name('plan');

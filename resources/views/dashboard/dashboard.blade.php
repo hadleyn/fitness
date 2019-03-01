@@ -10,7 +10,10 @@
 		<p>Here's a list of your plans</p>
 		<ul class="list-group">
 			@foreach ($plans as $p)
-				<li class="list-group-item"><a href="/dashboard/editplan/{{ $p->id }}">{{ $p->name }}</a></li>
+				<li class="list-group-item">
+					<a href="/plan/{{ $p->id }}">{{ $p->name }}</a>
+					<a href="/dashboard/editplan/{{ $p->id }}">Edit Plan</a>
+				</li>
 			@endforeach
 		</ul>
 		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
