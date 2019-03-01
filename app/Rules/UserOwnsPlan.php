@@ -2,6 +2,10 @@
 
 namespace App\Rules;
 
+use Illuminate\Support\Facades\Auth;
+
+use App\User;
+
 use Illuminate\Contracts\Validation\Rule;
 
 class UserOwnsPlan implements Rule
@@ -25,7 +29,15 @@ class UserOwnsPlan implements Rule
      */
     public function passes($attribute, $value)
     {
-        //
+      if (empty($value))
+      {
+        return TRUE;
+      }
+      else
+      {
+        $user = User::find(Auth::id());
+        return $user->doesUserOwnPlan($value);
+      }
     }
 
     /**
@@ -35,6 +47,6 @@ class UserOwnsPlan implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'The plan Id is invalid';
     }
 }

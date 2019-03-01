@@ -9,6 +9,7 @@ use Illuminate\Support\MessageBag;
 use App\Plan;
 use App\User;
 use App\PlanType;
+use App\Rules\UserOwnsPlan;
 
 class DashboardController extends Controller
 {
@@ -81,7 +82,7 @@ class DashboardController extends Controller
 
     $plan->save();
 
-		return redirect()->route('/dashboard');
+		return redirect()->route('dashboard');
 	}
 
 	private function validatePlan(Request $request)
@@ -92,7 +93,8 @@ class DashboardController extends Controller
     	'planName' => 'required|max:100',
     	'planType' => 'required',
 			'startDate' => 'required|date',
-			'goalDate' => 'required|date'
+			'goalDate' => 'required|date',
+			'planId' => new UserOwnsPlan
 		]);
 	}
 
