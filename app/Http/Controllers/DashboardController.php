@@ -12,6 +12,11 @@ use App\PlanType;
 class DashboardController extends Controller
 {
 
+	public function __construct()
+	{
+		$this->middleware('auth');
+	}
+
 	public function index()
 	{
 		Log::debug('User id is '.Auth::id());
