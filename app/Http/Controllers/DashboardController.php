@@ -53,6 +53,8 @@ class DashboardController extends Controller
 		$plan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
 
     $plan->save();
+
+		return redirect()->route('dashboard');
 	}
 
 }
