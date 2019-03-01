@@ -44,7 +44,7 @@ class DashboardController extends BehindLoginController
 		if ($user->doesUserOwnPlan($planId))
 		{
 			Log::debug('Yes, user owns this plan');
-			$viewData['plan'] = Plan::find($planId)->first();
+			$viewData['plan'] = Plan::find($planId);
 		}
 		else
 		{
@@ -71,7 +71,7 @@ class DashboardController extends BehindLoginController
 
     $plan->user_id = Auth::id();
 		$plan->name = $request->planName;
-		$plan->type = $request->planType;
+		$plan->plan_type_id = $request->planType;
 		$plan->start_date = date('Y-m-d H:i:s', strtotime($request->startDate));
 		$plan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
 

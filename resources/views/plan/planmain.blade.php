@@ -12,11 +12,7 @@
 
   <form method="POST" action="/plan/addData">
     @csrf
-    <div class="row">
-      <div class="col"><input class="form-control" type="text" placeholder="Data A"></div>
-      <div class="col"><input class="form-control" type="text" placeholder="Data B"></div>
-      <div class="col"><input class="form-control" type="text" placeholder="Data C"></div>
-    </div>
+    @yield('addData')
   </form>
 </div>
 @endsection

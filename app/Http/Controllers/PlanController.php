@@ -22,7 +22,21 @@ class PlanController extends BehindLoginController
 
       $viewData['plan'] = $plan;
       $viewData['planData'] = $planData;
-      
-      return view('plan.planmain', $viewData);
+
+      Log::debug('Plan type id '.$plan->planType->id);
+      if ($plan->planType->id == 2)
+      {
+        return view('plan.weightdataplan', $viewData);
+      }
+      else if ($plan->planType->id == 4)
+      {
+        return view('plan.bodycompdataplan', $viewData);
+      }
+      else
+      {
+        Log::error("I can haz error?");
+          //error?
+      }
+
     }
 }
