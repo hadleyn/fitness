@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-	<p>Yo dawg I heard you like dashboards</p>
+	<p>Yo dawg I heard you like dashboards test change</p>
 	@if ($plans->count() === 0)
 		<p>:( You don't have any plans set up</p>
 		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
