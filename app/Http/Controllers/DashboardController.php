@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
 	public function saveNewPlan(Request $request)
 	{
-		Log::debug("Validating the request. Request: ".print_r($request, TRUE));
+		Log::debug("Validating the request");
 		//Validate the incoming data
 		$request->validate([
     	'planName' => 'required|max:100',
@@ -40,7 +40,7 @@ class DashboardController extends Controller
 			'startDate' => 'required|date'
 		]);
 
-		Log::debug("We got past the validation. Request: ".print_r($request, TRUE));
+		Log::debug("We got past the validation.");
 
 		//We're good!
 		$plan = new Plan;
