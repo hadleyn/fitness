@@ -8,6 +8,7 @@
 		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
 	@else
 		<p>Here's a list of your plans</p>
+		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
 	@endif
 </div>	
 @endsection
