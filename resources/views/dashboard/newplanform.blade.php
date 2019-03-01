@@ -31,7 +31,7 @@
       <select id="planType" name="planType" class="custom-select">
           <option selected></option>
           @foreach ($planTypes as $planType)
-            <option @if ($plan->type == $planType->id) selected="selected" @endif value="{{ $planType->id }}">{{ $planType->description }}</option>
+            <option @if ($plan->plan_type_id == $planType->id) selected="selected" @endif value="{{ $planType->id }}">{{ $planType->description }}</option>
           @endforeach
       </select>
     </div>

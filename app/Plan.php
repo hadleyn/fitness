@@ -11,4 +11,14 @@ class Plan extends Model
 		return $this->belongsTo('App\User');
 	}
 
+	public function planType()
+	{
+		return $this->belongsTo('App\PlanType');
+	}
+
+	public function planData()
+	{
+		 return $this->hasMany('App\PlanData');
+	}
+
 }

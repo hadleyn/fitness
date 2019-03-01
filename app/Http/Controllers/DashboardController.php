@@ -11,13 +11,8 @@ use App\User;
 use App\PlanType;
 use App\Rules\UserOwnsPlan;
 
-class DashboardController extends Controller
+class DashboardController extends BehindLoginController
 {
-
-	public function __construct()
-	{
-		$this->middleware('auth');
-	}
 
 	public function index()
 	{
