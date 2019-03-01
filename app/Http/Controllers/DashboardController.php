@@ -32,6 +32,7 @@ class DashboardController extends Controller
 
 	public function saveNewPlan(Request $request)
 	{
+		Log::debug("Validating the request. Request: ".print_r($request, TRUE));
 		//Validate the incoming data
 		$request->validate([
     	'planName' => 'required|max:100',
