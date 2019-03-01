@@ -23,7 +23,7 @@
       <select id="planType" name="planType" class="custom-select">
           <option selected></option>
           @foreach ($planTypes as $plan)
-            <option value="{{ $plan->plan_id }}">{{ $plan->description }}</option>
+            <option value="{{ $plan->plan_type_id }}">{{ $plan->description }}</option>
           @endforeach
       </select>
     </div>
