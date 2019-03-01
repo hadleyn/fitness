@@ -49,8 +49,8 @@ class DashboardController extends Controller
     $plan->user_id = Auth::id();
 		$plan->name = $request->planName;
 		$plan->type = $request->planType;
-		$plan->start_date = $request->startDate;
-		$plan->goal_date = $request->goalDate;
+		$plan->start_date = date('Y-m-d H:i:s', strtotime($request->startDate));
+		$plan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
 
     $plan->save();
 	}
