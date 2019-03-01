@@ -12,6 +12,7 @@
     </div>
   @endif
   <form method="POST" action="/dashboard/savenewplan">
+    @csrf
     <div class="form-group">
       <p>Create your new plan!</p>
       <label class="required" for="planName">Plan Name</label>
