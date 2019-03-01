@@ -39,6 +39,8 @@ class DashboardController extends Controller
 			'startDate' => 'required|date'
 		]);
 
+		Log::debug("We got past the validation. Request: ".print_r($request, TRUE));
+
 		//We're good!
 		$plan = new Plan;
 
