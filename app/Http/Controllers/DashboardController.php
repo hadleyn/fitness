@@ -37,7 +37,8 @@ class DashboardController extends Controller
 		$request->validate([
     	'planName' => 'required|max:100',
     	'planType' => 'required',
-			'startDate' => 'required|date'
+			'startDate' => 'required|date',
+			'goalDate' => 'required|date'
 		]);
 
 		Log::debug("We got past the validation.");
