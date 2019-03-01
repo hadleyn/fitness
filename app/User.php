@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Plan;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -39,6 +41,17 @@ class User extends Authenticatable
 
     public function plans()
     {
-	return $this->hasMany('App\Plan');
+	     return $this->hasMany('App\Plan');
+    }
+
+    public function doesUserOwnPlan($planId)
+    {
+      if (Plan::where('user_id', $this->id)
+      ->where('id', $planId)
+      ->count() === 1)
+      {
+        return TRUE;
+      }
+      return FALSE;
     }
 }

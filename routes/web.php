@@ -23,4 +23,5 @@ Auth::routes();
 
 Route::get('/dashboard', 'DashboardController@index');
 Route::get('/dashboard/newplan', 'DashboardController@newPlan');
-Route::post('/dashboard/savenewplan', 'DashboardController@saveNewPlan');
+Route::post('/dashboard/saveplan', 'DashboardController@savePlan');
+Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
