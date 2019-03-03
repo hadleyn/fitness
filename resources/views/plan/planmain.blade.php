@@ -10,8 +10,18 @@
   </div>
   @endif
 
+  @if (Session::has('status'))
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <span>{{ session('status') }}</span>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  @endif
+
   <form method="POST" action="/plan/addData">
     @csrf
+    <input type="hidden" name="planId" value="{{ $plan->id }}" />
     @yield('addData')
   </form>
 </div>

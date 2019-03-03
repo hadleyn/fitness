@@ -2,8 +2,7 @@
 
 @section('addData')
 <div class="row">
-  <div class="col"><input class="form-control" type="text" placeholder="Weight Data"></div>
-  <div class="col"><input class="form-control" type="text" placeholder="Data B"></div>
-  <div class="col"><input class="form-control" type="text" placeholder="Data C"></div>
+  <div class="col"><input class="form-control" type="text" name="data" placeholder="Add a weight data point..."></div>
+  <div class="col"><input type="submit" class="btn btn-primary" value="Add Data"></div>
 </div>
 @endsection
