@@ -15,7 +15,7 @@ use App\Rules\UserOwnsPlan;
 
 class PlanController extends BehindLoginController
 {
-  
+
     public function index($planId)
     {
       Log::debug('Viewing a plan '.$planId);
@@ -53,7 +53,21 @@ class PlanController extends BehindLoginController
         Log::error("I can haz error?");
           //error?
       }
+    }
 
+    public function dataPull($planId)
+    {
+      Log::debug('data pull, plan id '.$planId);
+      $plan = Plan::find($planId);
+      $planData = $plan->planData;
+      $result = [];
+      foreach ($planData as $pd)
+      {
+        Log::debug('data from planData'.print_r($pd, TRUE));
+        $tmp = strtotime($pd->created_at);
+        $result[] = ['x' => date('Y-m-d', $tmp), 'y' => floatval($pd->data)];
+      }
+      echo json_encode($result);
     }
 
     public function addData(Request $request)

@@ -30,3 +30,4 @@ Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
 //Plan
 Route::get('/plan/{planId}', 'PlanController@index')->name('plan');
 Route::post('/plan/addData', 'PlanController@addData');
+Route::get('/plan/{planId}/datapull', 'PlanController@dataPull');

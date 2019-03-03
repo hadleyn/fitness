@@ -21,8 +21,10 @@
 
   <form method="POST" action="/plan/addData">
     @csrf
-    <input type="hidden" name="planId" value="{{ $plan->id }}" />
+    <input type="hidden" name="planId" id="planId" value="{{ $plan->id }}" />
     @yield('addData')
   </form>
+
+  <canvas id="dataChart" width="400" height="400"></canvas>
 </div>
 @endsection
