@@ -63,10 +63,13 @@ class PlanController extends BehindLoginController
       $result = [];
       foreach ($planData as $pd)
       {
-        Log::debug('data from planData'.print_r($pd, TRUE));
+        Log::debug($pd->created_at);
         $tmp = strtotime($pd->created_at);
-        $result[] = ['x' => date('Y-m-d', $tmp), 'y' => floatval($pd->data)];
+        $result['x'][] = date('Y-m-d', $tmp);
+        $result['y'][] = (float)$pd->data;
       }
+      $result['label'] = $pd->units;
+      $result['regression'] = $plan->getLinearRegressionLine();
       echo json_encode($result);
     }
 

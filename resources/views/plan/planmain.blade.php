@@ -25,6 +25,8 @@
     @yield('addData')
   </form>
 
-  <canvas id="dataChart" width="400" height="400"></canvas>
+  <div class="chart-container">
+    <canvas id="dataChart" width="400" height="400"></canvas>
+  </div>
 </div>
 @endsection

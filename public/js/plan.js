@@ -27,9 +27,6 @@ function pullDataToChart() {
   // Code to run if the request succeeds (is done);
   // The response is passed to the function
   .done(function( json ) {
-    $.each(json, function(element, value){
-      value.x = Date(value.x);
-    });
     console.log(json);
     createChart(json);
   })
@@ -48,12 +45,30 @@ function pullDataToChart() {
 }
 
 function createChart(chartData) {
+  console.log(chartData);
   var ctx = $('#dataChart');
   var myChart = new Chart(ctx, {
-     type: 'line',
-     data: chartData,
-     options: {
-       label: "Baby's First Chart"
-     }
-   });
+  type: 'line',
+  data: {
+    labels: chartData.x,
+    datasets: [{
+          data: chartData.y,
+          borderColor: 'rgba(22, 34, 255, 0.9)',
+          backgroundColor: 'rgba(22, 34, 255, 0.9)',
+          fill: false,
+          label: chartData.label
+        },
+        {
+          data: chartData.regression,
+          borderColor: 'rgba(0, 0, 0, 0.9)',
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          fill: false,
+          label: 'Regression'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
 }
