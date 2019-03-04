@@ -67,7 +67,7 @@ class PlanController extends BehindLoginController
     {
       Log::debug($pd->created_at);
       $tmp = strtotime($pd->created_at);
-      $result['x'][] = date('Y-m-d', $tmp);
+      $result['x'][] = date('m/d/Y', $tmp);
       $result['y'][] = (float)$pd->data;
     }
     $result['label'] = $pd->units;
@@ -80,7 +80,7 @@ class PlanController extends BehindLoginController
     $plan = Plan::find($planId);
     $planData = $plan->planData;
     $result['data'] = $planData->get($dataPointIndex)->data;
-    $result['date'] = $planData->get($dataPointIndex)->created_at;
+    $result['date'] = date('m/d/Y', strtotime($planData->get($dataPointIndex)->created_at));
     $result['planDataId'] = $planData->get($dataPointIndex)->id;
 
     echo json_encode($result);

@@ -3,7 +3,6 @@ var myChart;
 
 $(document).ready( function(){
 
-$('#test').datepicker();
   pullDataToChart();
 
   $('#dataPointEditSave').on('click', function(){
@@ -77,6 +76,7 @@ function createChart(chartData) {
 }
 
 function chartClicked(evt) {
+  console.log(evt);
   var index = myChart.getElementsAtEvent(evt)[0]._index;
   $.ajax({
     url: "/plan/"+$('#planId').val()+"/editDataPoint/"+index,
