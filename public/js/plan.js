@@ -1,14 +1,13 @@
+var ctx;
+var myChart;
+
 $(document).ready( function(){
-
-
-
-  // var myChart = new Chart(ctx, {
-  //   type: 'line',
-  //   data:
-  // });
 
   pullDataToChart();
 
+  $('#dataPointEditSave').on('click', function(){
+    saveDataPointEdit();
+  });
 });
 
 function pullDataToChart() {
@@ -22,7 +21,7 @@ function pullDataToChart() {
     type: "GET",
 
     // The type of data we expect back
-    dataType : "json",
+    dataType : "json"
   })
   // Code to run if the request succeeds (is done);
   // The response is passed to the function
@@ -46,8 +45,8 @@ function pullDataToChart() {
 
 function createChart(chartData) {
   console.log(chartData);
-  var ctx = $('#dataChart');
-  var myChart = new Chart(ctx, {
+  ctx = $('#dataChart');
+  myChart = new Chart(ctx, {
   type: 'line',
   data: {
     labels: chartData.x,
@@ -68,7 +67,47 @@ function createChart(chartData) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
+      onClick: function(evt) {
+        chartClicked(evt);
+      }
+    }
+  });
+}
+
+function chartClicked(evt) {
+  var index = myChart.getElementsAtEvent(evt)[0]._index;
+  $.ajax({
+    url: "/plan/"+$('#planId').val()+"/editDataPoint/"+index,
+    type: "GET",
+    dataType : "json"
+  })
+  .done(function(json) {
+    console.log(json);
+    $('#editData').val(json.data);
+    $('#editDataDate').val(json.date);
+    $('#planDataId').val(json.planDataId);
+    $('#dataPointEditModal').modal('show');
+  });
+}
+
+function saveDataPointEdit(evt) {
+  $.ajax({
+    url: "/plan/saveDataPointEdit",
+    type: 'POST',
+    dataType: 'json',
+    data: $('#editDataPointForm').serialize()
+  })
+  .done(function(json){
+    console.log(json);
+    if (json.errors.length != 0) {
+      $(json.errors).each(function(i, error){
+        console.log(error)
+        $('#modalAlerts').append('<div class="alert alert-danger">'+error+'</div>');
+      });
+    } else {
+      $('#dataPointEditModal').modal('hide');
+      pullDataToChart();
     }
   });
 }

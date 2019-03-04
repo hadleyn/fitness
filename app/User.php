@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 use App\Plan;
+use App\PlanData;
 
 class User extends Authenticatable
 {
@@ -47,8 +48,20 @@ class User extends Authenticatable
     public function doesUserOwnPlan($planId)
     {
       if (Plan::where('user_id', $this->id)
-      ->where('id', $planId)
-      ->count() === 1)
+        ->where('id', $planId)
+        ->count() === 1)
+      {
+        return TRUE;
+      }
+      return FALSE;
+    }
+
+    public function doesUserOwnPlanData($planDataId)
+    {
+      $planData = PlanData::find($planDataId);
+      if (Plan::where('user_id', $this->id)
+        ->where('id', $planData->plan_id)
+        ->count() === 1)
       {
         return TRUE;
       }
