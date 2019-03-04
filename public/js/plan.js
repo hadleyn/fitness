@@ -3,6 +3,7 @@ var myChart;
 
 $(document).ready( function(){
 
+$('#test').datepicker();
   pullDataToChart();
 
   $('#dataPointEditSave').on('click', function(){
@@ -88,6 +89,7 @@ function chartClicked(evt) {
     $('#editDataDate').val(json.date);
     $('#planDataId').val(json.planDataId);
     $('#dataPointEditModal').modal('show');
+    $('#editDataDate').datepicker();
   });
 }
 
