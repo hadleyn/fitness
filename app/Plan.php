@@ -23,16 +23,55 @@ class Plan extends Model
 		return $this->hasMany('App\PlanData');
 	}
 
+	public function getPredictedCompletionDate()
+	{
+		if ($this->planData->count() > 1)
+		{
+			$day = 0;
+			$m = $this->getSlope();
+			$b = $this->getYIntercept();
+			while (($m * $day) + $b > $this->goal)
+			{
+				$day++;
+			}
+
+			Log::debug('Predicted completion date '.date('Y-m-d', strtotime('now +'.$day.' days')));
+
+			return date('Y-m-d', strtotime('now +'.$day.' days'));
+		}
+		else
+		{
+			return "Not Enough Data";
+		}
+	}
+
+	public function getSlope()
+	{
+		$sums = $this->calculateSums();
+		$n = $this->planData->count();
+
+		$m = $this->calculateM($n, $sums);
+
+		return $m;
+	}
+
+	public function getYIntercept()
+	{
+		$sums = $this->calculateSums();
+		$n = $this->planData->count();
+
+		$b = $this->calculateB($n, $sums);
+
+		return $b;
+	}
+
 	public function getLinearRegressionLine()
 	{
 		$sums = $this->calculateSums();
 		$n = $this->planData->count();
-		Log::debug('Data count '.$n);
 
-		$m = (($n * $sums['xySum']) - ($sums['xSum'] * $sums['ySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
-		Log::debug('Regression line m='.$m);
-		$b = (($sums['x2Sum'] * $sums['ySum']) - ($sums['xSum'] * $sums['xySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
-		Log::debug('Regression line b='.$b);
+		$m = $this->calculateM($n, $sums);
+		$b = $this->calculateB($n, $sums);
 
 		//Now we have to create a phony "data set" that is actually just this line
 		$result = [];
@@ -40,7 +79,21 @@ class Plan extends Model
 		{
 			$result[] = ($m * $i) + $b;
 		}
-		Log::debug('Line data '.print_r($result, TRUE));
+
+		return $result;
+	}
+
+	private function calculateM($n, $sums)
+	{
+		$result = (($n * $sums['xySum']) - ($sums['xSum'] * $sums['ySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
+
+		return $result;
+	}
+
+	private function calculateB($n, $sums)
+	{
+		$result = (($sums['x2Sum'] * $sums['ySum']) - ($sums['xSum'] * $sums['xySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
+
 		return $result;
 	}
 

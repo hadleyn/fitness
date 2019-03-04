@@ -36,6 +36,10 @@
       </select>
     </div>
     <div class="form-group">
+      <label for="startDate">Plan Goal</label>
+      <input type="text" class="form-control" id="planGoal" name="planGoal" value="{{ old('planGoal', $plan->goal) }}">
+    </div>
+    <div class="form-group">
       <label for="startDate">Start Date</label>
       <input type="text" class="form-control" id="startDate" name="startDate" placeholder="mm/dd/yyyy" value="{{ old('startDate', $plan->start_date) }}">
     </div>

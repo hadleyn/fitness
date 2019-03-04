@@ -13,6 +13,7 @@
 				<li class="list-group-item">
 					<a href="/plan/{{ $p->id }}">{{ $p->name }}</a>
 					<a href="/dashboard/editplan/{{ $p->id }}">Edit Plan</a>
+					<span>Expected Completion Date: {{ $completionDate[$p->id] }}</span>
 				</li>
 			@endforeach
 		</ul>

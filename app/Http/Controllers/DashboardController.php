@@ -18,6 +18,21 @@ class DashboardController extends BehindLoginController
 	{
 		Log::debug('User id is '.Auth::id());
 		$plans = User::find(Auth::id())->plans;
+		//Calculate plan expected completion dates
+		foreach ($plans as $p)
+		{
+			switch ($p->planType->id)
+			{
+					case PlanType::REDUCE_WEIGHT:
+					case PlanType::GAIN_WEIGHT:
+					case PlanType::REDUCE_FAT_PERCENTAGE:
+					case PlanType::GAIN_MUSCLE:
+						$viewData['completionDate'][$p->id] = $p->getPredictedCompletionDate();
+						break;
+					default:
+						$viewData['completionDate'][$p->id] = "Not Applicable";
+			}
+		}
 		$viewData['plans'] = $plans;
 		return view('dashboard.dashboard', $viewData);
 	}
@@ -74,6 +89,7 @@ class DashboardController extends BehindLoginController
 		$plan->plan_type_id = $request->planType;
 		$plan->start_date = date('Y-m-d H:i:s', strtotime($request->startDate));
 		$plan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
+		$plan->goal = $request->planGoal;
 
     $plan->save();
 
@@ -89,6 +105,7 @@ class DashboardController extends BehindLoginController
     	'planType' => 'required',
 			'startDate' => 'required|date',
 			'goalDate' => 'required|date',
+			'planGoal' => 'required',
 			'planId' => new UserOwnsPlan
 		]);
 	}

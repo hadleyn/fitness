@@ -60,8 +60,8 @@ function createChart(chartData) {
         },
         {
           data: chartData.regression,
-          borderColor: 'rgba(0, 0, 0, 0.9)',
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          borderColor: 'rgba(0, 0, 0, 0.3)',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
           fill: false,
           label: 'Regression'
       }]
