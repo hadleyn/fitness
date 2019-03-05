@@ -6,3 +6,24 @@
   <div class="col"><input type="submit" class="btn btn-primary" value="Add Data"></div>
 </div>
 @endsection
+
+@section('dataTable')
+<div class="col">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Weight</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach ($planData as $pd)
+      <tr>
+        <th scope="row">{{ $pd->created_at }}</th>
+        <td>{{ $pd->data }}</td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
+</div>
+@endsection

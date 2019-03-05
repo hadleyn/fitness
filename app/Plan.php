@@ -30,12 +30,15 @@ class Plan extends Model
 			$day = 0;
 			$m = $this->getSlope();
 			$b = $this->getYIntercept();
+			if ($m >= 0 && $b > $this->goal)
+			{
+				//Slope isn't pointing towards goal
+				return 'Will never reach goal';
+			}
 			while (($m * $day) + $b > $this->goal)
 			{
 				$day++;
 			}
-
-			Log::debug('Predicted completion date '.date('Y-m-d', strtotime('now +'.$day.' days')));
 
 			return date('Y-m-d', strtotime('now +'.$day.' days'));
 		}

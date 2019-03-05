@@ -8,6 +8,10 @@ $(document).ready( function(){
   $('#dataPointEditSave').on('click', function(){
     saveDataPointEdit();
   });
+
+  $('#toggleGraphView').on('click', function(){
+    toggleGraphView();
+  });
 });
 
 function pullDataToChart() {
@@ -112,4 +116,24 @@ function saveDataPointEdit(evt) {
       pullDataToChart();
     }
   });
+}
+
+function toggleGraphView() {
+  console.log('toggling graph view');
+  console.log($('.chart-container').hasClass('showing'));
+  if ($('.chart-container').hasClass('showing')) {
+    //Switch to the table view
+    $('.chart-container').fadeOut(500, function(){
+      $('.table-container').fadeIn();
+      $('.chart-container').removeClass('showing');
+      $('.table-container').addClass('showing');
+    });
+  } else {
+    //Switch to the graph view
+    $('.table-container').fadeOut(500, function(){
+      $('.chart-container').fadeIn();
+      $('.table-container').removeClass('showing');
+      $('.chart-container').addClass('showing');
+    });
+  }
 }

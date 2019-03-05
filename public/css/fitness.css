@@ -5,3 +5,7 @@ body {
 .chart-container {
 	max-height: 500px;
 }
+
+.table-container {
+	display: none;
+}

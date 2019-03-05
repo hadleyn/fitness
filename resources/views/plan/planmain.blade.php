@@ -19,14 +19,26 @@
   </div>
   @endif
 
-  <form method="POST" action="/plan/addData">
-    @csrf
-    <input type="hidden" name="planId" id="planId" value="{{ $plan->id }}" />
-    @yield('addData')
-  </form>
+  <div class="row">
+    <div class="col">
+      <form method="POST" action="/plan/addData">
+        @csrf
+        <input type="hidden" name="planId" id="planId" value="{{ $plan->id }}" />
+        @yield('addData')
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <button class="btn btn-primary" id="toggleGraphView">Toggle to Table View</button>
+  </div>
 
-  <div class="chart-container">
-    <canvas id="dataChart" width="400" height="400"></canvas>
+  <div class="chart-container row showing">
+    <div class="col">
+      <canvas id="dataChart" width="400" height="400"></canvas>
+    </div>
+  </div>
+  <div class="table-container row">
+    @yield('dataTable')
   </div>
 
   <div class="modal fade" id="dataPointEditModal" tabindex="-1" role="dialog">

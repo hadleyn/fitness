@@ -17,7 +17,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
 
   <link rel="stylesheet" href="{{ URL::asset('css/fitness.css') }}">
-  <script src="{{ URL::asset('js/plan.js') }}"></script>
+  <script src="{{ URL::asset('js/plan.js?t='.time()) }}"></script>
 
     </head>
     <body>
