@@ -33,3 +33,4 @@ Route::post('/plan/addData', 'PlanController@addData');
 Route::get('/plan/{planId}/datapull', 'PlanController@dataPull');
 Route::get('/plan/{planId}/editDataPoint/{dataPointIndex}', 'PlanController@editDataPoint');
 Route::post('/plan/saveDataPointEdit/', 'PlanController@saveDataPointEdit');
+Route::post('/plan/submitBulkDataUpload', 'PlanController@submitBulkDataUpload');

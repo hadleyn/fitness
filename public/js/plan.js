@@ -12,6 +12,46 @@ $(document).ready( function(){
   $('#toggleGraphView').on('click', function(){
     toggleGraphView();
   });
+
+  $('#bulkDataUpload').on('click', function(){
+    $('#bulkDataUploadModal').modal('show');
+  });
+
+  $('#bulkDataUploadSubmit').on('click', function(){
+    //stop submit the form, we will post it manually.
+        event.preventDefault();
+
+        // Get form
+        var form = $('#bulkDataUploadForm')[0];
+
+		    // Create an FormData object
+        var data = new FormData(form);
+
+        $.ajax({
+            type: "POST",
+            enctype: 'multipart/form-data',
+            url: "/plan/submitBulkDataUpload",
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function (data) {
+
+                $("#result").text(data);
+                console.log("SUCCESS : ", data);
+                $("#btnSubmit").prop("disabled", false);
+
+            },
+            error: function (e) {
+
+                $("#result").text(e.responseText);
+                console.log("ERROR : ", e);
+                $("#btnSubmit").prop("disabled", false);
+
+            }
+        });
+  });
 });
 
 function pullDataToChart() {
@@ -109,7 +149,7 @@ function saveDataPointEdit(evt) {
     if (json.errors.length != 0) {
       $(json.errors).each(function(i, error){
         console.log(error)
-        $('#modalAlerts').append('<div class="alert alert-danger">'+error+'</div>');
+        $('#dataPointEditModal .modalAlerts').append('<div class="alert alert-danger">'+error+'</div>');
       });
     } else {
       $('#dataPointEditModal').modal('hide');

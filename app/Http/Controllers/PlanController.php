@@ -57,6 +57,14 @@ class PlanController extends BehindLoginController
     }
   }
 
+  public function submitBulkDataUpload(Request $request)
+  {
+    Log::debug('File incoming? '.print_r($request->bulkFile, TRUE));
+    $path = $request->file('bulkFile')->store('tmp');
+
+    Log::debug('Path for uploaded file '.$path);
+  }
+
   public function dataPull($planId)
   {
     Log::debug('data pull, plan id '.$planId);
