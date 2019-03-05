@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -59,10 +60,37 @@ class PlanController extends BehindLoginController
 
   public function submitBulkDataUpload(Request $request)
   {
-    Log::debug('File incoming? '.print_r($request->bulkFile, TRUE));
-    $path = $request->file('bulkFile')->store('tmp');
-
-    Log::debug('Path for uploaded file '.$path);
+    $result['errors'] = [];
+    try
+    {
+      Log::debug('File incoming? '.print_r($request->bulkFile, TRUE));
+      $path = $request->file('bulkFile')->store('tmp');
+      $fileData = Storage::get($path);
+      $lines = explode(PHP_EOL, $fileData);
+      $parsedData = [];
+      foreach ($lines as $line) {
+          $parsedData[] = str_getcsv($line);
+      }
+      Log::debug('parsed data '.print_r($parsedData, TRUE));
+      //Discard the first item, it's a header row
+      unset($parsedData[0]);
+      foreach ($parsedData as $rawData)
+      {
+        $planData = new PlanData();
+        $planData->plan_id = $request->planId;
+        $planData->data = $rawData[1];
+        $planData->created_at = $rawData[0];
+        $planData->units = "POUNDS";
+        $planData->data_type = "DOUBLE";
+        $planData->save();
+      }
+      Storage::delete($path);
+    }
+    catch (Exception $e)
+    {
+      $result['errors'][] = 'There was an error processing your file. Make sure it is correctly formatted';
+    }
+    echo json_encode($result);
   }
 
   public function dataPull($planId)
@@ -73,17 +101,20 @@ class PlanController extends BehindLoginController
     $sortedPlanData = $planData->sortBy('created_at');
 
     $result = [];
-    $daysOnPlan = $plan->getDaysOnPlan();
-    $firstDay = strtotime($sortedPlanData->first()->created_at);
-    for ($i = 0; $i <= $daysOnPlan; $i++)
+    if ($sortedPlanData->count() > 0)
     {
-      $currentDay = date('m/d/Y', strtotime('+'.$i.' days', $firstDay));
-      $result['x'][] = $currentDay;
-      $result['y'][] = PlanData::getPlanDataOnDate($planId, $currentDay);
-    }
+      $daysOnPlan = $plan->getDaysOnPlan();
+      $firstDay = strtotime($sortedPlanData->first()->created_at);
+      for ($i = 0; $i <= $daysOnPlan; $i++)
+      {
+        $currentDay = date('m/d/Y', strtotime('+'.$i.' days', $firstDay));
+        $result['x'][] = $currentDay;
+        $result['y'][] = PlanData::getPlanDataOnDate($planId, $currentDay);
+      }
 
-    $result['label'] = 'Pounds';
-    $result['regression'] = $plan->getLinearRegressionLine();
+      $result['label'] = 'Pounds';
+      $result['regression'] = $plan->getLinearRegressionLine();
+    }
     echo json_encode($result);
   }
 

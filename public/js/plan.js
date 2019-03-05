@@ -21,41 +21,11 @@ $(document).ready( function(){
     $('#bulkDataUploadModal').modal('show');
   });
 
-  $('#bulkDataUploadSubmit').on('click', function(){
+  $('#bulkDataUploadSubmit').on('click', function(event){
     //stop submit the form, we will post it manually.
         event.preventDefault();
-
-        // Get form
-        var form = $('#bulkDataUploadForm')[0];
-
-		    // Create an FormData object
-        var data = new FormData(form);
-
-        $.ajax({
-            type: "POST",
-            enctype: 'multipart/form-data',
-            url: "/plan/submitBulkDataUpload",
-            data: data,
-            processData: false,
-            contentType: false,
-            cache: false,
-            timeout: 600000,
-            success: function (data) {
-
-                $("#result").text(data);
-                console.log("SUCCESS : ", data);
-                $("#btnSubmit").prop("disabled", false);
-
-            },
-            error: function (e) {
-
-                $("#result").text(e.responseText);
-                console.log("ERROR : ", e);
-                $("#btnSubmit").prop("disabled", false);
-
-            }
-        });
-  });
+        submitBulkDataUpload();
+    });
 });
 
 function pullDataToChart() {
@@ -198,4 +168,33 @@ function toggleGraphView() {
       $('.chart-container').addClass('showing');
     });
   }
+}
+
+function submitBulkDataUpload() {
+  // Get form
+  var form = $('#bulkDataUploadForm')[0];
+
+  // Create an FormData object
+  var data = new FormData(form);
+
+  $.ajax({
+      type: "POST",
+      enctype: 'multipart/form-data',
+      url: "/plan/submitBulkDataUpload",
+      data: data,
+      dataType: 'json',
+      processData: false,
+      contentType: false,
+      cache: false,
+      timeout: 600000,
+      success: function (json) {
+        if (json.errors.length != 0) {
+          $(json.errors).each(function(i, error){
+            $('#dataPointEditModal .modalAlerts').append('<div class="alert alert-danger">'+error+'</div>');
+          });
+        } else {
+          window.location.reload();
+        }
+      }
+  });
 }
