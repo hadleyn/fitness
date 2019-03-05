@@ -71,37 +71,28 @@ class PlanController extends BehindLoginController
     $plan = Plan::find($planId);
     $planData = $plan->planData;
     $sortedPlanData = $planData->sortBy('created_at');
-    
+
     $result = [];
-    foreach ($sortedPlanData as $index => $pd)
+    $daysOnPlan = $plan->getDaysOnPlan();
+    $firstDay = strtotime($sortedPlanData->first()->created_at);
+    for ($i = 0; $i <= $daysOnPlan; $i++)
     {
-      if ($index > 0)
-      {
-      	//How many days have passed between the current data record and the previous one?
-      	$days = round((strtotime($pd->created_at) - strtotime($sortedPlanData->get($index-1)->created_at)) / 86400, 0);
-      	for ($i = 1; $i < $days; $i++)
-      	{
-      		//Pad the data set for the graph
-      		$result['x'][] = date('m/d/Y', strtotime($pd->created_at.' +'.$days.' days'));
-      		$result['y'][] = null;
-      	}
-      }
-      $tmp = strtotime($pd->created_at);
-      $result['x'][] = date('m/d/Y', $tmp);
-      $result['y'][] = (float)$pd->data;
+      $currentDay = date('m/d/Y', strtotime('+'.$i.' days', $firstDay));
+      $result['x'][] = $currentDay;
+      $result['y'][] = PlanData::getPlanDataOnDate($planId, $currentDay);
     }
-    $result['label'] = $pd->units;
+
+    $result['label'] = 'Pounds';
     $result['regression'] = $plan->getLinearRegressionLine();
     echo json_encode($result);
   }
 
-  public function editDataPoint($planId, $dataPointIndex)
+  public function editDataPoint($planId, $dataPointId)
   {
-    $plan = Plan::find($planId);
-    $planData = $plan->planData;
-    $result['data'] = $planData->get($dataPointIndex)->data;
-    $result['date'] = date('m/d/Y', strtotime($planData->get($dataPointIndex)->created_at));
-    $result['planDataId'] = $planData->get($dataPointIndex)->id;
+    $planData = PlanData::find($dataPointId);
+    $result['data'] = $planData->data;
+    $result['date'] = date('m/d/Y', strtotime($planData->created_at));
+    $result['planDataId'] = $planData->id;
 
     echo json_encode($result);
   }

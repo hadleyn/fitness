@@ -13,6 +13,10 @@ $(document).ready( function(){
     toggleGraphView();
   });
 
+  $('.editDataPoint').on('click', function() {
+    editDataPoint($(this).data('id'));
+  });
+
   $('#bulkDataUpload').on('click', function(){
     $('#bulkDataUploadModal').modal('show');
   });
@@ -110,20 +114,37 @@ function createChart(chartData) {
       }]
     },
     options: {
+      spanGaps: true,
       responsive: true,
       maintainAspectRatio: false,
       onClick: function(evt) {
-        chartClicked(evt);
+        // chartClicked(evt);
       }
     }
   });
 }
 
 function chartClicked(evt) {
-  console.log(evt);
-  var index = myChart.getElementsAtEvent(evt)[0]._index;
+  console.log(myChart.getElementAtEvent(evt));
+  var index = myChart.getElementAtEvent(evt)[0]._index;
   $.ajax({
     url: "/plan/"+$('#planId').val()+"/editDataPoint/"+index,
+    type: "GET",
+    dataType : "json"
+  })
+  .done(function(json) {
+    console.log(json);
+    $('#editData').val(json.data);
+    $('#editDataDate').val(json.date);
+    $('#planDataId').val(json.planDataId);
+    $('#dataPointEditModal').modal('show');
+    $('#editDataDate').datepicker();
+  });
+}
+
+function editDataPoint(dataPointId) {
+  $.ajax({
+    url: "/plan/"+$('#planId').val()+"/editDataPoint/"+dataPointId,
     type: "GET",
     dataType : "json"
   })
@@ -153,7 +174,8 @@ function saveDataPointEdit(evt) {
       });
     } else {
       $('#dataPointEditModal').modal('hide');
-      pullDataToChart();
+      // pullDataToChart();
+      window.location.reload();
     }
   });
 }

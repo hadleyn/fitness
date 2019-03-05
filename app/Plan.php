@@ -23,6 +23,22 @@ class Plan extends Model
 		return $this->hasMany('App\PlanData');
 	}
 
+	/**
+	* This will return the total number of days the plan has been
+	* in use. This is NOT necessarily the same as the number of
+	* data points in the plan.
+	*
+	* Days On Plan = Days between first day and last day.
+	*/
+	public function getDaysOnPlan()
+	{
+		$sortedPlanData = $this->planData->sortBy('created_at');
+
+		$days = round((strtotime($sortedPlanData->last()->created_at) - strtotime($sortedPlanData->first()->created_at)) / 86400, 0);
+
+		return $days;
+	}
+
 	public function getPredictedCompletionDate()
 	{
 		if ($this->planData->count() > 1)
@@ -76,9 +92,9 @@ class Plan extends Model
 		$m = $this->calculateM($n, $sums);
 		$b = $this->calculateB($n, $sums);
 
-		//Now we have to create a phony "data set" that is actually just this line
 		$result = [];
-		for ($i = 0; $i < $n; $i++)
+		$daysOnPlan = $this->getDaysOnPlan();
+		for ($i = 0; $i <= $daysOnPlan; $i++)
 		{
 			$result[] = ($m * $i) + $b;
 		}
@@ -112,8 +128,9 @@ class Plan extends Model
 		$sums['xySum'] = 0;
 		$sums['x2Sum'] = 0;
 		$sums['y2Sum'] = 0;
+		$sortedPlanData = $this->planData->sortBy('created_at');
 
-		foreach ($this->planData as $pd)
+		foreach ($sortedPlanData as $pd)
 		{
 			$x = round((strtotime($pd->created_at) - strtotime($this->planData->get(0)->created_at)) / 86400, 0);
 			Log::debug('current - previous '.$x);

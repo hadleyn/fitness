@@ -21,6 +21,7 @@
       <tr>
         <th scope="row">{{ $pd->created_at }}</th>
         <td>{{ $pd->data }}</td>
+        <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}">Edit</a></td>
       </tr>
       @endforeach
     </tbody>
