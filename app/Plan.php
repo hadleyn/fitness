@@ -133,7 +133,6 @@ class Plan extends Model
 		foreach ($sortedPlanData as $pd)
 		{
 			$x = round((strtotime($pd->created_at) - strtotime($this->planData->get(0)->created_at)) / 86400, 0);
-			Log::debug('current - previous '.$x);
 			$sums['xSum'] += $x;
 			$sums['ySum'] += (float)$pd->data;
 			$sums['xySum'] += ((float)$pd->data * $x);

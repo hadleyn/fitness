@@ -3,7 +3,9 @@ var myChart;
 
 $(document).ready( function(){
 
-  pullDataToChart();
+  if ($('.chart-container').length > 0) {
+    pullDataToChart();
+  }
 
   $('#dataPointEditSave').on('click', function(){
     saveDataPointEdit();
