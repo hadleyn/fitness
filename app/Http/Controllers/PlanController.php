@@ -70,10 +70,22 @@ class PlanController extends BehindLoginController
     Log::debug('data pull, plan id '.$planId);
     $plan = Plan::find($planId);
     $planData = $plan->planData;
+    $sortedPlanData = $planData->sortBy('created_at');
+    
     $result = [];
-    foreach ($planData as $pd)
+    foreach ($sortedPlanData as $index => $pd)
     {
-      Log::debug($pd->created_at);
+      if ($index > 0)
+      {
+      	//How many days have passed between the current data record and the previous one?
+      	$days = round((strtotime($pd->created_at) - strtotime($sortedPlanData->get($index-1)->created_at)) / 86400, 0);
+      	for ($i = 1; $i < $days; $i++)
+      	{
+      		//Pad the data set for the graph
+      		$result['x'][] = date('m/d/Y', strtotime($pd->created_at.' +'.$days.' days'));
+      		$result['y'][] = null;
+      	}
+      }
       $tmp = strtotime($pd->created_at);
       $result['x'][] = date('m/d/Y', $tmp);
       $result['y'][] = (float)$pd->data;

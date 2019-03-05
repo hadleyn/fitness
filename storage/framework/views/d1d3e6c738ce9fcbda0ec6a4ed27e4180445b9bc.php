@@ -30,9 +30,13 @@
       <select id="planType" name="planType" class="custom-select">
           <option selected></option>
           <?php $__currentLoopData = $planTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $planType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <option <?php if($plan->type == $planType->id): ?> selected="selected" <?php endif; ?> value="<?php echo e($planType->id); ?>"><?php echo e($planType->description); ?></option>
+            <option <?php if($plan->plan_type_id == $planType->id): ?> selected="selected" <?php endif; ?> value="<?php echo e($planType->id); ?>"><?php echo e($planType->description); ?></option>
           <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </select>
+    </div>
+    <div class="form-group">
+      <label for="startDate">Plan Goal</label>
+      <input type="text" class="form-control" id="planGoal" name="planGoal" value="<?php echo e(old('planGoal', $plan->goal)); ?>">
     </div>
     <div class="form-group">
       <label for="startDate">Start Date</label>

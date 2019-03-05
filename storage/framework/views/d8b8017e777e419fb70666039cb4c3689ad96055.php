@@ -12,6 +12,12 @@
 				<li class="list-group-item">
 					<a href="/plan/<?php echo e($p->id); ?>"><?php echo e($p->name); ?></a>
 					<a href="/dashboard/editplan/<?php echo e($p->id); ?>">Edit Plan</a>
+					<span>Expected Completion Date: <?php echo e($completionDate[$p->id]); ?></span>
+					<?php if(strtotime($completionDate[$p->id]) <= strtotime($p->goal_date)): ?>
+						<span class="badge badge-success">On Track!</span>
+					<?php else: ?>
+						<span class="badge badge-warning">Not on Track</span>
+					<?php endif; ?>
 				</li>
 			<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 		</ul>
