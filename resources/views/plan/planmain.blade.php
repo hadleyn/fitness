@@ -46,6 +46,23 @@
     @yield('dataTable')
   </div>
 
+  <div class="row">
+    <div class="col">
+      <h2>Plan Analysis</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      Slope (weight lost per day) 
+    </div>
+    <div class="col">
+
+    </div>
+    <div class="col">
+
+    </div>
+  </div>
+
   <!-- Modals -->
   @include('plan.modals.editdatapoint')
   @include('plan.modals.bulkupload')

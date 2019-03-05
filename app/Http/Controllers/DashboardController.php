@@ -19,20 +19,21 @@ class DashboardController extends BehindLoginController
 		Log::debug('User id is '.Auth::id());
 		$plans = User::find(Auth::id())->plans;
 		//Calculate plan expected completion dates
-		foreach ($plans as $p)
-		{
-			switch ($p->planType->id)
-			{
-					case PlanType::REDUCE_WEIGHT:
-					case PlanType::GAIN_WEIGHT:
-					case PlanType::REDUCE_FAT_PERCENTAGE:
-					case PlanType::GAIN_MUSCLE:
-						$viewData['completionDate'][$p->id] = $p->getPredictedCompletionDate();
-						break;
-					default:
-						$viewData['completionDate'][$p->id] = "Not Applicable";
-			}
-		}
+		// foreach ($plans as $p)
+		// {
+		// 	switch ($p->planType->id)
+		// 	{
+		// 			case PlanType::REDUCE_WEIGHT:
+		// 			case PlanType::GAIN_WEIGHT:
+		// 			case PlanType::REDUCE_FAT_PERCENTAGE:
+		// 			case PlanType::GAIN_MUSCLE:
+		// 				$viewData['completionDate'][$p->id] = $p->getPredictedCompletionDate();
+		// 				break;
+		// 			default:
+		// 				$viewData['completionDate'][$p->id] = "Not Applicable";
+		// 	}
+		// }
+		Log::debug('Plans that I got '.print_r($plans, TRUE));
 		$viewData['plans'] = $plans;
 		return view('dashboard.dashboard', $viewData);
 	}
