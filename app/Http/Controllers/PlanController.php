@@ -81,7 +81,7 @@ class PlanController extends BehindLoginController
     {
       $daysOnPlan = $plan->getDaysOnPlan();
       $firstDay = strtotime($sortedPlanData->first()->created_at);
-      for ($i = 0; $i <= $daysOnPlan; $i++)
+      for ($i = 0; $i < $daysOnPlan; $i++)
       {
         $currentDay = date('m/d/Y', strtotime('+'.$i.' days', $firstDay));
         $result['x'][] = $currentDay;
@@ -90,6 +90,7 @@ class PlanController extends BehindLoginController
 
       $result['label'] = 'Pounds';
       $result['regression'] = $plan->getLinearRegressionLine();
+      $result['expected'] = $plan->plannable->getExpectedLossData();
     }
     echo json_encode($result);
   }
@@ -140,19 +141,14 @@ class PlanController extends BehindLoginController
   {
     $plan = Plan::find($request->planId);
     //First let's figure out what type of plan this is
-    $planType = $plan->planType->id;
-    switch ($planType)
-    {
-      case PlanType::REDUCE_WEIGHT:
-        $this->validateReduceWeightData($request);
-        $dataPoint = new WeightPlanData();
-        break;
-    }
 
+    $plan->plannable->validateReduceWeightData($request);
+
+    $dataPoint = new PlanData;
     $dataPoint->plan_id = $request->planId;
     $dataPoint->data = $request->data;
-    $dataPoint->data_type = $dataPoint->getDataType();
-    $dataPoint->units = $dataPoint->getUnits();
+    $dataPoint->data_type = $plan->plannable->getDataPointType();
+    $dataPoint->units = $plan->plannable->getDataPointUnit();
 
     $dataPoint->save();
 
