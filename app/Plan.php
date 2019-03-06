@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use App\Exceptions\InvalidPlanException;
+
 class Plan extends Model
 {
 
@@ -46,27 +48,7 @@ class Plan extends Model
 
 	public function getPredictedCompletionDate()
 	{
-		if ($this->planData->count() > 1)
-		{
-			$day = 0;
-			$m = $this->getSlope();
-			$b = $this->getYIntercept();
-			if ($m >= 0 && $b > $this->goal)
-			{
-				//Slope isn't pointing towards goal
-				return 'Will never reach goal';
-			}
-			while (($m * $day) + $b > $this->goal)
-			{
-				$day++;
-			}
-
-			return date('Y-m-d', strtotime('now +'.$day.' days'));
-		}
-		else
-		{
-			return "Not Enough Data";
-		}
+		throw new InvalidPlanException('Plan is generic type. Use ->plannable to get specific plan type functions');
 	}
 
 	public function getSlope()
