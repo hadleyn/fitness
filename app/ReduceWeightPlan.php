@@ -12,6 +12,21 @@ class ReduceWeightPlan extends Model
       return $this->morphOne('App\Plan', 'plannable');
     }
 
+    public function getPlanForm()
+    {
+      return 'dashboard.weightreductionplanform';
+    }
+
+    public function getPlanView()
+    {
+      return 'plan.weightdataplan';
+    }
+
+    public function getPlanTypeDescription()
+    {
+      return 'Reduce Weight';
+    }
+
     public function getPredictedCompletionDate()
     {
       if ($this->plan->planData->count() > 1)

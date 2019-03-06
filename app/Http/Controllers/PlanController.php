@@ -30,32 +30,8 @@ class PlanController extends BehindLoginController
     $viewData['plan'] = $plan;
     $viewData['planData'] = $planData;
 
-    Log::debug('Plan type id '.$plan->planType->id);
-    if ($plan->planType->id == PlanType::REDUCE_WEIGHT)
-    {
-      return view('plan.weightdataplan', $viewData);
-    }
-    else if ($plan->planType->id == PlanType::REDUCE_FAT_PERCENTAGE)
-    {
-      return view('plan.reducefatdataplan', $viewData);
-    }
-    else if ($plan->planType->id == PlanType::GAIN_MUSCLE)
-    {
-      return view('plan.gainmuscledataplan', $viewData);
-    }
-    else if ($plan->planType->id == PlanType::GAIN_WEIGHT)
-    {
-      return view('plan.gainweightdataplan', $viewData);
-    }
-    else if ($plan->planType->id == PlanType::WORKOUT)
-    {
-      return view('plan.workoutdataplan', $viewData);
-    }
-    else
-    {
-      Log::error("I can haz error?");
-      //error?
-    }
+    return view($plan->plannable->getPlanView(), $viewData);
+
   }
 
   public function submitBulkDataUpload(Request $request)

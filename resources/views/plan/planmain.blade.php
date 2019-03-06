@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-  <h1>{{ $plan->name }} <span class="badge badge-primary">{{ $plan->planType->description }}</span></h1>
+  <h1>{{ $plan->name }} <span class="badge badge-primary">{{ $plan->plannable->getPlanTypeDescription() }}</span></h1>
 
   @if (count($planData) === 0)
   <div class="alert alert-warning">
@@ -53,7 +53,7 @@
   </div>
   <div class="row">
     <div class="col">
-      Slope (weight lost per day) 
+      Slope (weight lost per day)
     </div>
     <div class="col">
 

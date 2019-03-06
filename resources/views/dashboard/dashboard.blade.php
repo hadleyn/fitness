@@ -22,7 +22,10 @@
 				</li>
 			@endforeach
 		</ul>
-		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPlanChooserModal">
+		  Create New Plan
+		</button>
 	@endif
+	@include('dashboard.modals.newplanchooser')
 </div>
 @endsection
