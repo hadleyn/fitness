@@ -64,6 +64,7 @@ class DashboardController extends BehindLoginController
 		Log::debug('running plan validation');
 		$request->validate([
     	'planName' => 'required|max:100',
+			'startingWeight' => 'required|numeric',
 			'startDate' => 'required|date',
 			'goalDate' => 'required|date',
 			'planGoal' => 'required|numeric',
@@ -81,7 +82,7 @@ class DashboardController extends BehindLoginController
 		}
 
 		$reduceWeightPlan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
-		$reduceWeightPlan->goal = $request->planGoal;
+		$reduceWeightPlan->goal_weight = $request->planGoal;
 		$reduceWeightPlan->save();
 
     $plan->user_id = Auth::id();

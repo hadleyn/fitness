@@ -28,3 +28,22 @@
   </table>
 </div>
 @endsection
+
+@section('planAnalysis')
+<div class="row">
+  <div class="col">
+    <h2>Plan Analysis</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    Slope (weight lost per day): {{ round($plan->getSlope(), 3) }}
+  </div>
+  <div class="col">
+    Expected Loss Per Day: {{ $plan->plannable->getExpectedLossPerDay() }}
+  </div>
+  <div class="col">
+    Y-Intercept: {{ $plan->getYIntercept() }}
+  </div>
+</div>
+@endsection

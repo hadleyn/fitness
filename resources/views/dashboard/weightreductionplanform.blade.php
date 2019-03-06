@@ -27,11 +27,19 @@
       <input type="text" class="form-control" id="planName" name="planName" placeholder="Enter a descriptive name for your new plan!" value="{{ old('planName', $plan->name) }}">
     </div>
     <div class="form-group">
+      <label for="startingWeight">Starting Weight</label>
+      @if (empty($plan->id))
+        <input type="text" class="form-control" id="startingWeight" name="startingWeight" value="{{ old('startingWeight') }}">
+      @else
+        <input type="text" class="form-control" id="startingWeight" name="startingWeight" value="{{ old('startingWeight', $plan->plannable->starting_weight) }}">
+      @endif
+    </div>
+    <div class="form-group">
       <label for="startDate">Goal Weight</label>
       @if (empty($plan->id))
         <input type="text" class="form-control" id="planGoal" name="planGoal" value="{{ old('planGoal') }}">
       @else
-        <input type="text" class="form-control" id="planGoal" name="planGoal" value="{{ old('planGoal', $plan->plannable->goal) }}">
+        <input type="text" class="form-control" id="planGoal" name="planGoal" value="{{ old('planGoal', $plan->plannable->goal_weight) }}">
       @endif
     </div>
     <div class="form-group">
