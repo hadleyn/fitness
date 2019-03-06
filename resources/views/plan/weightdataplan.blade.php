@@ -46,4 +46,12 @@
     Y-Intercept: {{ $plan->getYIntercept() }}
   </div>
 </div>
+<div class="row">
+  	<div class="col">
+  		Total Weight Lost: {{ $plan->plannable->getTotalWeightLost() }}	
+	</div>
+	<div class="col">
+		<button class="btn btn-primary" id="toggleRollingAverage">Toggle Rolling Average</button>
+	</div>
+</div>
 @endsection

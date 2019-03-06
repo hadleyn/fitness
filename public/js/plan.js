@@ -28,6 +28,10 @@ $(document).ready( function(){
         event.preventDefault();
         submitBulkDataUpload();
     });
+	
+	$('#toggleRollingAverage').on('click', function(){
+		toggleRollingAverage();
+	});
 });
 
 function pullDataToChart() {
@@ -188,4 +192,41 @@ function submitBulkDataUpload() {
         }
       }
   });
+}
+
+function toggleRollingAverage() {
+	$.ajax({
+		type: 'post',
+		dataType: 'json',
+		data: {
+			'planId': $('#planId').val()
+		},
+		url: '/plan/rollingAverageDataPull'
+	})
+	.done(function(json){
+		myChart.data.datasets = [{
+	          data: json.y,
+	          borderColor: 'rgba(22, 34, 255, 0.9)',
+	          backgroundColor: 'rgba(22, 34, 255, 0.9)',
+	          fill: false,
+	          label: json.label
+	        },
+	        {
+	          data: json.regression,
+	          borderColor: 'rgba(0, 0, 0, 0.3)',
+	          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+	          fill: false,
+	          label: 'Regression'
+	        },
+	        {
+	          data: json.expected,
+	          borderColor: 'rgba(204, 0, 0, 0.9)',
+	          backgroundColor: 'rgba(204, 0, 0, 0.9)',
+	          fill: false,
+	          label: 'Expected'
+	        }];
+	    myChart.labels = json.x;	
+	    myChart.update();
+	});
+		
 }

@@ -38,6 +38,11 @@ class ReduceWeightPlan extends Model
     {
       return 'POUNDS';
     }
+    
+    public function getTotalWeightLost()
+    {
+    	return $this->plan->planData->last()->data - $this->starting_weight;
+    }
 
     public function getExpectedLossPerDay()
     {

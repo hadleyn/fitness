@@ -13,7 +13,7 @@
 					<a href="/plan/<?php echo e($p->id); ?>"><?php echo e($p->name); ?></a>
 					<a href="/dashboard/editplan/<?php echo e($p->id); ?>">Edit Plan</a>
 					<span>Expected Completion Date: <?php echo e($completionDate[$p->id]); ?></span>
-					<?php if(strtotime($completionDate[$p->id]) <= strtotime($p->goal_date)): ?>
+					<?php if(strtotime($completionDate[$p->id]) <= strtotime($p->plannable->goal_date)): ?>
 						<span class="badge badge-success">On Track!</span>
 					<?php else: ?>
 						<span class="badge badge-warning">Not on Track</span>
@@ -21,8 +21,11 @@
 				</li>
 			<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 		</ul>
-		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPlanChooserModal">
+		  Create New Plan
+		</button>
 	<?php endif; ?>
+	<?php echo $__env->make('dashboard.modals.newplanchooser', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 </div>
 <?php $__env->stopSection(); ?>
 

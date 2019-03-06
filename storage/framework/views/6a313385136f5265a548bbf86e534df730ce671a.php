@@ -1,7 +1,7 @@
 <?php /* /var/www/html/fitness-dev/resources/views/plan/planmain.blade.php */ ?>
 <?php $__env->startSection('content'); ?>
 <div class="container">
-  <h1><?php echo e($plan->name); ?> <span class="badge badge-primary"><?php echo e($plan->planType->description); ?></span></h1>
+  <h1><?php echo e($plan->name); ?> <span class="badge badge-primary"><?php echo e($plan->plannable->getPlanTypeDescription()); ?></span></h1>
 
   <?php if(count($planData) === 0): ?>
   <div class="alert alert-warning">
@@ -44,6 +44,8 @@
   <div class="table-container row">
     <?php echo $__env->yieldContent('dataTable'); ?>
   </div>
+
+  <?php echo $__env->yieldContent('planAnalysis'); ?>
 
   <!-- Modals -->
   <?php echo $__env->make('plan.modals.editdatapoint', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

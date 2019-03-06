@@ -20,10 +20,38 @@
       <tr>
         <th scope="row"><?php echo e($pd->created_at); ?></th>
         <td><?php echo e($pd->data); ?></td>
+        <td><a href="#" class="editDataPoint" data-id="<?php echo e($pd->id); ?>">Edit</a></td>
       </tr>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </tbody>
   </table>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('planAnalysis'); ?>
+<div class="row">
+  <div class="col">
+    <h2>Plan Analysis</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    Slope (weight lost per day): <?php echo e(round($plan->getSlope(), 3)); ?>
+
+  </div>
+  <div class="col">
+    Expected Loss Per Day: <?php echo e($plan->plannable->getExpectedLossPerDay()); ?>
+
+  </div>
+  <div class="col">
+    Y-Intercept: <?php echo e($plan->getYIntercept()); ?>
+
+  </div>
+</div>
+<div class="row">
+  	<div class="col">
+  		Total Weight Lost: <?php echo e($plan->plannable->getTotalWeightLost()); ?>	
+	</div>	
 </div>
 <?php $__env->stopSection(); ?>
 
