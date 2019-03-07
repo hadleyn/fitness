@@ -69,14 +69,18 @@ class PlanController extends BehindLoginController
     echo json_encode($result);
   }
 
-  public function rollingAverageDataPull(Request $request)
+  public function rollingAverageDataPull($planId)
   {
     Log::debug('data pull, plan id '.$planId);
     $plan = Plan::find($planId);
-    $planData = $plan->planData;
-    $sortedPlanData = $planData->sortBy('created_at');
+    $dataSet = $plan->getRollingAverageDataSet();
 
     $result = [];
+    foreach ($dataSet as $dataObj)
+    {
+      $result['x'][] = $dataObj['date'];
+      $result['y'][] = $dataObj['average'];
+    }
     echo json_encode($result);
   }
 

@@ -28,7 +28,7 @@ $(document).ready( function(){
         event.preventDefault();
         submitBulkDataUpload();
     });
-	
+
 	$('#toggleRollingAverage').on('click', function(){
 		toggleRollingAverage();
 	});
@@ -196,12 +196,9 @@ function submitBulkDataUpload() {
 
 function toggleRollingAverage() {
 	$.ajax({
-		type: 'post',
+		type: 'get',
 		dataType: 'json',
-		data: {
-			'planId': $('#planId').val()
-		},
-		url: '/plan/rollingAverageDataPull'
+		url: '/plan/'+$('#planId').val()+'/rollingAverageDataPull'
 	})
 	.done(function(json){
 		myChart.data.datasets = [{
@@ -210,23 +207,9 @@ function toggleRollingAverage() {
 	          backgroundColor: 'rgba(22, 34, 255, 0.9)',
 	          fill: false,
 	          label: json.label
-	        },
-	        {
-	          data: json.regression,
-	          borderColor: 'rgba(0, 0, 0, 0.3)',
-	          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-	          fill: false,
-	          label: 'Regression'
-	        },
-	        {
-	          data: json.expected,
-	          borderColor: 'rgba(204, 0, 0, 0.9)',
-	          backgroundColor: 'rgba(204, 0, 0, 0.9)',
-	          fill: false,
-	          label: 'Expected'
 	        }];
-	    myChart.labels = json.x;	
-	    myChart.update();
+	  myChart.data.labels = json.x;
+	  myChart.update();
 	});
-		
+
 }

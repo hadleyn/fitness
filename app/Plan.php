@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 use App\Exceptions\InvalidPlanException;
+use App\PlanData;
 
 class Plan extends Model
 {
@@ -84,6 +85,24 @@ class Plan extends Model
 		for ($i = 0; $i <= $daysOnPlan; $i++)
 		{
 			$result[] = ($m * $i) + $b;
+		}
+
+		return $result;
+	}
+
+	public function getRollingAverageDataSet($period = 7)
+	{
+		$chunkedPlanData = $this->planData->sortBy('created_at')->chunk($period);
+		$result = [];
+		foreach ($chunkedPlanData as $dataChunk)
+		{
+			$tmpSum = 0;
+			foreach ($dataChunk as $d)
+			{
+				$tmpSum += $d->data;
+			}
+			$result[] = ['date' => $dataChunk->first()->created_at->format('m/d/Y'),
+										'average' => ($tmpSum / $dataChunk->count())];
 		}
 
 		return $result;

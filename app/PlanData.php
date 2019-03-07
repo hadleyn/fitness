@@ -36,7 +36,7 @@ class PlanData extends Model implements IPlanData
                         ->where([
                             ['plan_id', '=', $planId],
                             ['created_at', '>=', $lowerBound],
-                            ['created_at', '<', $upperBound],
+                            ['created_at', '<', $upperBound]
                           ])
                         ->get()->first();
     if ($planDataOnDate !== null)
@@ -45,5 +45,31 @@ class PlanData extends Model implements IPlanData
       return $planData->data;
     }
     return null;
+  }
+
+  public static function getPlanDataBetweenDates($planId, $startDate, $endDate)
+  {
+    Log::debug('Start Date End Date '.$startDate.' '.$endDate);
+    $startDateUnixTimestamp = strtotime($startDate);
+    $endDateUnixTimestamp = strtotime($endDate);
+    $lowerBound = date('Y-m-d 00:00:00', $startDateUnixTimestamp);
+    $upperBound = date('Y-m-d 00:00:00', $endDateUnixTimestamp);
+    $dbResult = DB::table('plan_data')
+                                ->select('id')
+                                ->orderBy('created_at', 'asc')
+                                ->where([
+                                  ['plan_id', '=', $planId],
+                                  ['created_at', '>=', $lowerBound],
+                                  ['created_at', '<', $upperBound]
+                                ])
+                                ->get();
+                                
+    $data = [];
+    foreach ($dbResult as $result)
+    {
+      $data[] = PlanData::find($result->id);
+    }
+
+    return $data;
   }
 }
