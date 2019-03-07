@@ -6,10 +6,6 @@ body {
 	max-height: 500px;
 }
 
-.table-container {
-	display: none;
-}
-
 .footer {
 	position: absolute;
 	bottom: 0;

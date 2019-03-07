@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -45,7 +46,7 @@ class ReduceWeightPlan extends Model
       {
     	   return $this->plan->planData->last()->data - $this->starting_weight;
       }
-      return 0; 
+      return 0;
     }
 
     public function getExpectedLossPerDay()

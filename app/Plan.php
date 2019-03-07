@@ -40,11 +40,45 @@ class Plan extends Model
 	*/
 	public function getDaysOnPlan()
 	{
-		$sortedPlanData = $this->planData->sortBy('created_at');
+		$sortedPlanData = $this->planData->sortBy('simple_date');
 
 		$days = round((strtotime($sortedPlanData->last()->created_at) - strtotime($sortedPlanData->first()->created_at)) / 86400, 0);
 
 		return $days;
+	}
+
+	/**
+	* Sometimes it's useful to get a continuous data set. This is defined as x
+	* values for every day on the plan, and a "N/A" for days with missing data.
+	*/
+	public function getContinuousDataSet()
+	{
+		$sortedPlanData = $this->planData->sortBy('simple_date');
+		$firstDate = $sortedPlanData->first()->simple_date;
+		$lastDate = $sortedPlanData->last()->simple_date;
+		$dayCounter = $firstDate;
+		$dataSet = [];
+		while (strtotime($dayCounter) <= strtotime($lastDate))
+		{
+			$planData = PlanData::where('simple_date', $dayCounter)->get();
+			if ($planData->count() === 1)
+			{
+				$dataSet[$dayCounter] = $planData->first();
+			}
+			else
+			{
+				$dataSet[$dayCounter] = null;
+			}
+			$dayCounter = date('Y-m-d', strtotime($dayCounter . ' +1 day'));
+		}
+
+		return $dataSet;
+	}
+
+	public function getDataOnNthDayOfPlan($n)
+	{
+		$firstPlanDate = $this->planData->sortBy('simple_date')->first()->simple_date;
+		return PlanData::where('simple_date', $firstPlanDate);
 	}
 
 	public function getPredictedCompletionDate()
@@ -103,16 +137,20 @@ class Plan extends Model
 
 	public function getRollingAverageDataSet($period = 7)
 	{
-		$chunkedPlanData = $this->planData->sortBy('created_at')->chunk($period);
+		$continuousData = collect($this->getContinuousDataSet())->chunk($period);
+
 		$result = [];
-		foreach ($chunkedPlanData as $dataChunk)
+		foreach ($continuousData as $dataChunk)
 		{
 			$tmpSum = 0;
 			foreach ($dataChunk as $d)
 			{
-				$tmpSum += $d->data;
+				if ($d != null)
+				{
+					$tmpSum += $d->data;
+				}
 			}
-			$result[] = ['date' => $dataChunk->first()->created_at->format('m/d/Y'),
+			$result[] = ['date' => $dataChunk->first()->simple_date,
 										'average' => ($tmpSum / $dataChunk->count())];
 		}
 
@@ -145,7 +183,7 @@ class Plan extends Model
 		$sums['xySum'] = 0;
 		$sums['x2Sum'] = 0;
 		$sums['y2Sum'] = 0;
-		$sortedPlanData = $this->planData->sortBy('created_at');
+		$sortedPlanData = $this->planData->sortBy('simple_date');
 
 		foreach ($sortedPlanData as $pd)
 		{

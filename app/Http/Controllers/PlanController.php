@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -19,16 +20,17 @@ use App\Rules\UserOwnsPlanData;
 class PlanController extends BehindLoginController
 {
 
+  const DISPLAY_DATE_FORMAT = 'm/d/Y';
+
   public function index($planId)
   {
-    Log::debug('Viewing a plan '.$planId);
     //Get all the associated data for this plan
-
     $plan = Plan::find($planId);
-    $planData = $plan->planData;
 
+    $viewData['displayDateFormat'] = PlanController::DISPLAY_DATE_FORMAT;
     $viewData['plan'] = $plan;
-    $viewData['planData'] = $planData;
+    $viewData['continuousPlanData'] = $plan->getContinuousDataSet();
+    $viewData['expected'] = $plan->plannable->getExpectedLossData();
 
     return view($plan->plannable->getPlanView(), $viewData);
 
@@ -55,7 +57,7 @@ class PlanController extends BehindLoginController
         $planData = new PlanData();
         $planData->plan_id = $request->planId;
         $planData->data = $rawData[1];
-        $planData->created_at = $rawData[0];
+        $planData->simple_date = date('Y-m-d', strtotime($rawData[0]));
         $planData->units = "POUNDS";
         $planData->data_type = "DOUBLE";
         $planData->save();
@@ -81,6 +83,7 @@ class PlanController extends BehindLoginController
       $result['x'][] = $dataObj['date'];
       $result['y'][] = $dataObj['average'];
     }
+    $result['label'] = 'My Data';
     echo json_encode($result);
   }
 
@@ -88,25 +91,27 @@ class PlanController extends BehindLoginController
   {
     Log::debug('data pull, plan id '.$planId);
     $plan = Plan::find($planId);
-    $planData = $plan->planData;
-    $sortedPlanData = $planData->sortBy('created_at');
+    $continuousDataSet = $plan->getContinuousDataSet();
 
     $result = [];
-    if ($sortedPlanData->count() > 0)
-    {
-      $daysOnPlan = $plan->getDaysOnPlan();
-      $firstDay = strtotime($sortedPlanData->first()->created_at);
-      for ($i = 0; $i < $daysOnPlan; $i++)
-      {
-        $currentDay = date('m/d/Y', strtotime('+'.$i.' days', $firstDay));
-        $result['x'][] = $currentDay;
-        $result['y'][] = PlanData::getPlanDataOnDate($planId, $currentDay);
-      }
 
-      $result['label'] = 'Pounds';
-      $result['regression'] = $plan->getLinearRegressionLine();
-      $result['expected'] = $plan->plannable->getExpectedLossData();
+    foreach ($continuousDataSet as $date => $planData)
+    {
+      $result['x'][] = date(PlanController::DISPLAY_DATE_FORMAT, strtotime($date));
+      if ($planData != null)
+      {
+        $result['y'][] = $planData->data;
+      }
+      else
+      {
+        $result['y'][] = null;
+      }
     }
+
+    $result['label'] = 'My Data';
+    $result['regression'] = $plan->getLinearRegressionLine();
+    $result['expected'] = $plan->plannable->getExpectedLossData();
+
     echo json_encode($result);
   }
 
@@ -137,7 +142,7 @@ class PlanController extends BehindLoginController
     if (count($errors->all()) === 0)
     {
       $dataPoint->data = $request->editData;
-      $dataPoint->created_at = date('Y-m-d H:i:s', strtotime($request->editDataDate));
+      $dataPoint->simple_date = date('Y-m-d', strtotime($request->editDataDate));
 
       $dataPoint->save();
     }
@@ -162,6 +167,7 @@ class PlanController extends BehindLoginController
     $dataPoint = new PlanData;
     $dataPoint->plan_id = $request->planId;
     $dataPoint->data = $request->data;
+    $dataPoint->simple_date = date('Y-m-d');
     $dataPoint->data_type = $plan->plannable->getDataPointType();
     $dataPoint->units = $plan->plannable->getDataPointUnit();
 

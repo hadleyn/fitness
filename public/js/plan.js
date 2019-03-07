@@ -11,10 +11,6 @@ $(document).ready( function(){
     saveDataPointEdit();
   });
 
-  $('#toggleGraphView').on('click', function(){
-    toggleGraphView();
-  });
-
   $('.editDataPoint').on('click', function() {
     editDataPoint($(this).data('id'));
   });
@@ -146,26 +142,6 @@ function saveDataPointEdit(evt) {
       window.location.reload();
     }
   });
-}
-
-function toggleGraphView() {
-  console.log('toggling graph view');
-  console.log($('.chart-container').hasClass('showing'));
-  if ($('.chart-container').hasClass('showing')) {
-    //Switch to the table view
-    $('.chart-container').fadeOut(500, function(){
-      $('.table-container').fadeIn();
-      $('.chart-container').removeClass('showing');
-      $('.table-container').addClass('showing');
-    });
-  } else {
-    //Switch to the graph view
-    $('.table-container').fadeOut(500, function(){
-      $('.chart-container').fadeIn();
-      $('.table-container').removeClass('showing');
-      $('.chart-container').addClass('showing');
-    });
-  }
 }
 
 function submitBulkDataUpload() {
