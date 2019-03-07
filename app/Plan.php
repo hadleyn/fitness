@@ -75,12 +75,6 @@ class Plan extends Model
 		return $dataSet;
 	}
 
-	public function getDataOnNthDayOfPlan($n)
-	{
-		$firstPlanDate = $this->planData->sortBy('simple_date')->first()->simple_date;
-		return PlanData::where('simple_date', $firstPlanDate);
-	}
-
 	public function getPredictedCompletionDate()
 	{
 		throw new InvalidPlanException('Plan is generic type. Use ->plannable to get specific plan type functions');

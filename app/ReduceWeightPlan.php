@@ -73,6 +73,18 @@ class ReduceWeightPlan extends Model
   		return $result;
     }
 
+    public function getExpectedDataForDate($date)
+    {
+      $firstDate = $this->plan->planData->sortBy('simple_date')->first()->simple_date;
+      $diff = strtotime($date) - strtotime($firstDate);
+      $days = round(($diff / (24 * 60 * 60)), 0);
+      $b = $this->starting_weight;
+      $m = $this->getExpectedLossPerDay();
+  		$result = ($m * $days) + $b;
+
+      return $result;
+    }
+
     public function getPredictedCompletionDate()
     {
       if ($this->plan->planData->count() > 1)

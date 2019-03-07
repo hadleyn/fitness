@@ -4,6 +4,7 @@ var myChart;
 $(document).ready( function(){
 
   if ($('.chart-container').length > 0) {
+    createChart();
     pullDataToChart();
   }
 
@@ -26,7 +27,7 @@ $(document).ready( function(){
     });
 
 	$('#toggleRollingAverage').on('click', function(){
-		toggleRollingAverage();
+		toggleRollingAverage(this);
 	});
 });
 
@@ -40,8 +41,31 @@ function pullDataToChart() {
   // Code to run if the request succeeds (is done);
   // The response is passed to the function
   .done(function( json ) {
-    console.log(json);
-    createChart(json);
+    var datasets = [{
+          data: json.y,
+          borderColor: 'rgba(22, 34, 255, 0.9)',
+          backgroundColor: 'rgba(22, 34, 255, 0.9)',
+          fill: false,
+          label: json.label,
+          borderWidth: 2
+        },
+        {
+          data: json.regression,
+          borderColor: 'rgba(0, 0, 0, 0.3)',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          fill: false,
+          label: 'Regression',
+          borderWidth: 2
+        },
+        {
+          data: json.expected,
+          borderColor: 'rgba(204, 0, 0, 0.9)',
+          backgroundColor: 'rgba(204, 0, 0, 0.9)',
+          fill: false,
+          label: 'Expected',
+          borderWidth: 2
+        }];
+    updateChart(json.x, datasets);
   });
 }
 
@@ -50,34 +74,8 @@ function createChart(chartData) {
   ctx = $('#dataChart');
   myChart = new Chart(ctx, {
   type: 'line',
-  data: {
-    labels: chartData.x,
-    datasets: [{
-          data: chartData.y,
-          borderColor: 'rgba(22, 34, 255, 0.9)',
-          backgroundColor: 'rgba(22, 34, 255, 0.9)',
-          fill: false,
-          label: chartData.label,
-          borderWidth: 2
-        },
-        {
-          data: chartData.regression,
-          borderColor: 'rgba(0, 0, 0, 0.3)',
-          backgroundColor: 'rgba(0, 0, 0, 0.3)',
-          fill: false,
-          label: 'Regression',
-          borderWidth: 2
-        },
-        {
-          data: chartData.expected,
-          borderColor: 'rgba(204, 0, 0, 0.9)',
-          backgroundColor: 'rgba(204, 0, 0, 0.9)',
-          fill: false,
-          label: 'Expected',
-          borderWidth: 2
-        }]
-    },
-    options: {
+  data: {},
+  options: {
       spanGaps: true,
       responsive: true,
       maintainAspectRatio: false,
@@ -173,22 +171,34 @@ function submitBulkDataUpload() {
   });
 }
 
-function toggleRollingAverage() {
-	$.ajax({
-		type: 'get',
-		dataType: 'json',
-		url: '/plan/'+$('#planId').val()+'/rollingAverageDataPull'
-	})
-	.done(function(json){
-		myChart.data.datasets = [{
-	          data: json.y,
-	          borderColor: 'rgba(22, 34, 255, 0.9)',
-	          backgroundColor: 'rgba(22, 34, 255, 0.9)',
-	          fill: false,
-	          label: json.label
-	        }];
-	  myChart.data.labels = json.x;
-	  myChart.update();
-	});
+function toggleRollingAverage(button) {
+  if ($(button).hasClass('active')) {
+    pullRollingAverageToChart();
+  } else {
+    pullDataToChart();
+  }
+}
 
+function pullRollingAverageToChart() {
+  $.ajax({
+    type: 'get',
+    dataType: 'json',
+    url: '/plan/'+$('#planId').val()+'/rollingAverageDataPull'
+  })
+  .done(function(json){
+    var datasets = [{
+            data: json.y,
+            borderColor: 'rgba(22, 34, 255, 0.9)',
+            backgroundColor: 'rgba(22, 34, 255, 0.9)',
+            fill: false,
+            label: json.label
+          }];
+    updateChart(json.x, datasets);
+  });
+}
+
+function updateChart(labels, dataSets) {
+  myChart.data.datasets = dataSets;
+  myChart.data.labels = labels;
+  myChart.update();
 }

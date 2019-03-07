@@ -15,6 +15,7 @@
         <th scope="col">Date</th>
         <th scope="col">Weight</th>
         <th scope="col">Expected</th>
+        <th scope="col">Daily Delta</th>
         <th scope="col">Action</th>
       </tr>
     </thead>
@@ -24,10 +25,12 @@
         <th scope="row">{{ date($displayDateFormat, strtotime($date)) }}</th>
         @if ($pd == null)
           <td>No Data</td>
-          <td></td>
+          <td>{{ $plan->plannable->getExpectedDataForDate($date) }}</td>
+          <td>N/A</td>
           <td><a href="#" class="editDataPoint">Set Data?</a></td>
         @else
           <td>{{ $pd->data }}</td>
+          <td>{{ $plan->plannable->getExpectedDataForDate($date) }}</td>
           <td></td>
           <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}">Edit</a></td>
         @endif
@@ -60,7 +63,12 @@
   		Total Weight Lost: {{ $plan->plannable->getTotalWeightLost() }}
 	</div>
 	<div class="col">
-		<button class="btn btn-primary" id="toggleRollingAverage">Toggle Rolling Average</button>
+    <div>
+      <label>
+        <input id="toggleRollingAverage" type="checkbox" data-toggle="toggle">
+        Toggle Rolling Average
+      </label>
+    </div>
 	</div>
 </div>
 @endsection
