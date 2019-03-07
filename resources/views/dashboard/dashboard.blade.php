@@ -5,7 +5,9 @@
 	<p>Yo dawg I heard you like dashboards test change</p>
 	@if ($plans->count() === 0)
 		<p>:( You don't have any plans set up</p>
-		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPlanChooserModal">
+		  Create New Plan
+		</button>
 	@else
 		<p>Here's a list of your plans</p>
 		<ul class="list-group">

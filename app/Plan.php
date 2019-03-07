@@ -57,7 +57,11 @@ class Plan extends Model
 		$sums = $this->calculateSums();
 		$n = $this->planData->count();
 
-		$m = $this->calculateM($n, $sums);
+		$m = 0;
+		if ($n > 1)
+		{
+			$m = $this->calculateM($n, $sums);
+		}
 
 		return $m;
 	}
@@ -67,7 +71,11 @@ class Plan extends Model
 		$sums = $this->calculateSums();
 		$n = $this->planData->count();
 
-		$b = $this->calculateB($n, $sums);
+		$b = 0;
+		if ($n > 1)
+		{
+			$b = $this->calculateB($n, $sums);
+		}
 
 		return $b;
 	}
@@ -77,14 +85,17 @@ class Plan extends Model
 		$sums = $this->calculateSums();
 		$n = $this->planData->count();
 
-		$m = $this->calculateM($n, $sums);
-		$b = $this->calculateB($n, $sums);
-
 		$result = [];
-		$daysOnPlan = $this->getDaysOnPlan();
-		for ($i = 0; $i <= $daysOnPlan; $i++)
+		if ($n > 1)
 		{
-			$result[] = ($m * $i) + $b;
+			$m = $this->calculateM($n, $sums);
+			$b = $this->calculateB($n, $sums);
+
+			$daysOnPlan = $this->getDaysOnPlan();
+			for ($i = 0; $i <= $daysOnPlan; $i++)
+			{
+				$result[] = ($m * $i) + $b;
+			}
 		}
 
 		return $result;

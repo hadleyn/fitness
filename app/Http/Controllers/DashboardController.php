@@ -83,6 +83,7 @@ class DashboardController extends BehindLoginController
 
 		$reduceWeightPlan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
 		$reduceWeightPlan->goal_weight = $request->planGoal;
+		$reduceWeightPlan->starting_weight = $request->startingWeight;
 		$reduceWeightPlan->save();
 
     $plan->user_id = Auth::id();
