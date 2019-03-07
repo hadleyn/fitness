@@ -61,21 +61,24 @@ function createChart(chartData) {
           borderColor: 'rgba(22, 34, 255, 0.9)',
           backgroundColor: 'rgba(22, 34, 255, 0.9)',
           fill: false,
-          label: chartData.label
+          label: chartData.label,
+          borderWidth: 2
         },
         {
           data: chartData.regression,
           borderColor: 'rgba(0, 0, 0, 0.3)',
           backgroundColor: 'rgba(0, 0, 0, 0.3)',
           fill: false,
-          label: 'Regression'
+          label: 'Regression',
+          borderWidth: 2
         },
         {
           data: chartData.expected,
           borderColor: 'rgba(204, 0, 0, 0.9)',
           backgroundColor: 'rgba(204, 0, 0, 0.9)',
           fill: false,
-          label: 'Expected'
+          label: 'Expected',
+          borderWidth: 2
         }]
     },
     options: {
