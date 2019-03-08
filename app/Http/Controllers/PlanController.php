@@ -35,6 +35,7 @@ class PlanController extends BehindLoginController
     $viewData['dailyDeltas'] = $plan->plannable->getDailyDeltas();
     $viewData['slope'] = Regression::getSlope($plan->planData);
     $viewData['yIntercept'] = Regression::getYIntercept($plan->planData);
+    Log::debug('Daily slopes '.print_r($plan->plannable->getDailySlope(), TRUE));
 
     return view($plan->plannable->getPlanView(), $viewData);
 

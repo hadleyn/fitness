@@ -80,11 +80,10 @@ class Regression
 		{
       if ($pd->data)
       {
-  			$x = $index;
-  			$sums['xSum'] += $x;
+  			$sums['xSum'] += $index;
   			$sums['ySum'] += (float)$pd->data;
-  			$sums['xySum'] += ((float)$pd->data * $x);
-  			$sums['x2Sum'] += pow($x, 2);
+  			$sums['xySum'] += ((float)$pd->data * $index);
+  			$sums['x2Sum'] += pow($index, 2);
   			$sums['y2Sum'] += pow((float)$pd->data, 2);
       }
 		}
@@ -93,6 +92,10 @@ class Regression
 
   private static function calculateM($n, $sums)
   {
+    if ($sums['x2Sum'] === 0 || $sums['xSum'] === 0 || $n === 0)
+    {
+      return 0; //Technically this is a NaN situation, but this helps keep things from breaking
+    }
     $result = (($n * $sums['xySum']) - ($sums['xSum'] * $sums['ySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
 
 		return $result;

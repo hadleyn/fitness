@@ -111,6 +111,25 @@ class ReduceWeightPlan extends Model
       return collect($result);
     }
 
+    public function getDailySlope()
+    {
+      $continuousData = $this->plan->getContinuousDataSet();
+      Log::debug('continuous data looks like '.print_r($continuousData->first(), TRUE));
+      Log::debug('raw data looks like '.print_r($this->plan->planData->first(), TRUE));
+      Log::debug('slice looks like '.print_r($continuousData->slice(0, 4), TRUE));
+
+      $i = 1;
+      $n = $continuousData->count();
+      $result = [];
+      while ($i < $n)
+      {
+        $result[] = Regression::getSlope($this->plan->planData->slice(0, $i));
+        $i++;
+      }
+
+      return $result;
+    }
+
     public function getExpectedDataForDate($date)
     {
       $firstDate = $this->plan->planData->sortBy('simple_date')->first()->simple_date;
