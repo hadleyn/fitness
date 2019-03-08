@@ -41,11 +41,7 @@
   </nav>
   <div class="tab-content" id="nav-tabContent">
     <div class="tab-pane fade show active" id="charts" role="tabpanel" aria-labelledby="nav-charts-tab">
-      <div class="chart-container row">
-        <div class="col">
-          <canvas id="dataChart" width="400" height="400"></canvas>
-        </div>
-      </div>
+        @yield('dataChart')
     </div>
     <div class="tab-pane fade" id="tables" role="tabpanel" aria-labelledby="nav-tables-tab">
       <div class="table-container row">

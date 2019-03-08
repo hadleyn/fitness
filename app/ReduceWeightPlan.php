@@ -6,6 +6,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use App\Helpers\Regression;
 use App\Rules\UserOwnsPlan;
 
 class ReduceWeightPlan extends Model
@@ -77,29 +78,37 @@ class ReduceWeightPlan extends Model
     {
       $continuousData = $this->plan->getContinuousDataSet();
       $result = [];
-      foreach ($continuousData as $date => $planData)
+      foreach ($continuousData as $index => $planData)
       {
-        $previousDay = date('Y-m-d', strtotime($date. ' -1 day'));
-        if ($continuousData->has($previousDay))
+        if ($continuousData->has($index - 1))
         {
-          $previousDayPlanData = $continuousData->get($previousDay);
-          if ($previousDayPlanData && $planData)
+          $previousDayPlanData = $continuousData->get($index - 1);
+          if ($previousDayPlanData->data && $planData->data)
           {
-            $result[$date] = number_format($planData->data - $previousDayPlanData->data, 2);
+            $resultData = new PlanData();
+            $resultData->data = number_format($planData->data - $previousDayPlanData->data, 2);
+            $resultData->simple_date = $planData->simple_date;
+            $result[] = $resultData;
           }
           else
           {
-            $result[$date] = 'N/A';
+            $resultData = new PlanData();
+            $resultData->data = 'N/A';
+            $resultData->simple_date = $planData->simple_date;
+            $result[] = $resultData;
           }
         }
         else
         {
           //This should be the first day
-          $result[$date] = 'N/A';
+          $resultData = new PlanData();
+          $resultData->data = 'N/A';
+          $resultData->simple_date = $planData->simple_date;
+          $result[] = $resultData;
         }
       }
 
-      return $result;
+      return collect($result);
     }
 
     public function getExpectedDataForDate($date)
@@ -119,8 +128,8 @@ class ReduceWeightPlan extends Model
       if ($this->plan->planData->count() > 1)
   		{
   			$day = 0;
-  			$m = $this->plan->getSlope();
-  			$b = $this->plan->getYIntercept();
+  			$m = Regression::getSlope($this->plan->planData);
+  			$b = Regression::getYIntercept($this->plan->planData);
   			if ($m >= 0 && $b > $this->goal_weight)
   			{
   				//Slope isn't pointing towards goal

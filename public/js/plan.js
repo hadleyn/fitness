@@ -1,11 +1,12 @@
 var ctx;
-var myChart;
+var myChart, dailyDeltaChart;
 
 $(document).ready( function(){
 
   if ($('.chart-container').length > 0) {
-    createChart();
+    createCharts();
     pullDataToChart();
+    pullDailyDeltaData();
   }
 
   $('#dataPointEditSave').on('click', function(){
@@ -31,6 +32,28 @@ $(document).ready( function(){
 	});
 });
 
+function pullDailyDeltaData() {
+  $.ajax({
+    url: "/plan/"+$('#planId').val()+"/pullDailyDeltaData",
+    type: "GET",
+    dataType : "json"
+  })
+  // Code to run if the request succeeds (is done);
+  // The response is passed to the function
+  .done(function( json ) {
+    console.log(json);
+    var datasets = [{
+          data: json.y,
+          borderColor: 'rgba(22, 34, 255, 0.9)',
+          backgroundColor: 'rgba(22, 34, 255, 0.9)',
+          fill: false,
+          label: json.label,
+          borderWidth: 2
+        }];
+    updateDailyDeltaChart(json.x, datasets);
+  });
+}
+
 function pullDataToChart() {
   // Using the core $.ajax() method
   $.ajax({
@@ -41,6 +64,7 @@ function pullDataToChart() {
   // Code to run if the request succeeds (is done);
   // The response is passed to the function
   .done(function( json ) {
+    console.log(json);
     var datasets = [{
           data: json.y,
           borderColor: 'rgba(22, 34, 255, 0.9)',
@@ -65,12 +89,11 @@ function pullDataToChart() {
           label: 'Expected',
           borderWidth: 2
         }];
-    updateChart(json.x, datasets);
+    updateMyChart(json.x, datasets);
   });
 }
 
-function createChart(chartData) {
-  console.log(chartData);
+function createCharts() {
   ctx = $('#dataChart');
   myChart = new Chart(ctx, {
   type: 'line',
@@ -82,6 +105,16 @@ function createChart(chartData) {
       onClick: function(evt) {
         // chartClicked(evt);
       }
+    }
+  });
+  ctx = $('#dailyDeltaChart');
+  dailyDeltaChart = new Chart(ctx, {
+  type: 'line',
+  data: {},
+  options: {
+      spanGaps: true,
+      responsive: true,
+      maintainAspectRatio: false
     }
   });
 }
@@ -193,12 +226,18 @@ function pullRollingAverageToChart() {
             fill: false,
             label: json.label
           }];
-    updateChart(json.x, datasets);
+    updateMyChart(json.x, datasets);
   });
 }
 
-function updateChart(labels, dataSets) {
+function updateMyChart(labels, dataSets) {
   myChart.data.datasets = dataSets;
   myChart.data.labels = labels;
   myChart.update();
+}
+
+function updateDailyDeltaChart(labels, dataSets) {
+  dailyDeltaChart.data.datasets = dataSets;
+  dailyDeltaChart.data.labels = labels;
+  dailyDeltaChart.update();
 }

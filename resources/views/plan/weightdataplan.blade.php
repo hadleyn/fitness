@@ -7,6 +7,19 @@
 </div>
 @endsection
 
+@section('dataChart')
+<div class="chart-container row">
+  <div class="col">
+    <canvas id="dataChart" width="400" height="400"></canvas>
+  </div>
+</div>
+<div class="chart-container row">
+  <div class="col">
+    <canvas id="dailyDeltaChart" width="400" height="400"></canvas>
+  </div>
+</div>
+@endsection
+
 @section('dataTable')
 <!-- <div class="col"> -->
   <table class="table table-striped table-sm">
@@ -20,22 +33,18 @@
       </tr>
     </thead>
     <tbody>
-      @foreach ($continuousPlanData as $date => $pd)
+      @foreach ($continuousPlanData as $index => $pd)
       <tr>
-        <th scope="row">{{ date($displayDateFormat, strtotime($date)) }}</th>
-        @if ($pd == null)
+        <th scope="row">{{ date($displayDateFormat, strtotime($pd->simple_date)) }}</th>
+        @if ($pd->data == null)
           <td>No Data</td>
-          <td>{{ $plan->plannable->getExpectedDataForDate($date) }}</td>
-          <td>{{ $dailyDeltas[$date] }}</td>
+          <td>{{ $plan->plannable->getExpectedDataForDate($pd->simple_date) }}</td>
+          <td>{{ $dailyDeltas->get($index)->data }}</td>
           <td><a href="#" class="editDataPoint">Set Data?</a></td>
         @else
           <td>{{ $pd->data }}</td>
-          <td>{{ $plan->plannable->getExpectedDataForDate($date) }}</td>
-          @if (is_numeric($dailyDeltas[$date]) && $dailyDeltas[$date] > 0)
-            <td class="table-warning">{{ $dailyDeltas[$date] }}</td>
-          @else
-            <td class="table-success">{{ $dailyDeltas[$date] }}</td>
-          @endif
+          <td>{{ $plan->plannable->getExpectedDataForDate($pd->simple_date) }}</td>
+          <td>{{ $dailyDeltas->get($index)->data }}</td>
           <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}">Edit</a></td>
         @endif
       </tr>

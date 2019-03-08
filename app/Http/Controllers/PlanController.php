@@ -28,9 +28,10 @@ class PlanController extends BehindLoginController
     //Get all the associated data for this plan
     $plan = Plan::find($planId);
 
+    $continuousData = $plan->getContinuousDataSet();
     $viewData['displayDateFormat'] = PlanController::DISPLAY_DATE_FORMAT;
     $viewData['plan'] = $plan;
-    $viewData['continuousPlanData'] = $plan->getContinuousDataSet();
+    $viewData['continuousPlanData'] = $continuousData;
     $viewData['dailyDeltas'] = $plan->plannable->getDailyDeltas();
     $viewData['slope'] = Regression::getSlope($plan->planData);
     $viewData['yIntercept'] = Regression::getYIntercept($plan->planData);
@@ -90,6 +91,28 @@ class PlanController extends BehindLoginController
     echo json_encode($result);
   }
 
+  public function pullDailyDeltaData($planId)
+  {
+    $plan = Plan::find($planId);
+    $continuousData = $plan->getContinuousDataSet();
+    $dailyDeltas = $plan->plannable->getDailyDeltas();
+
+    $result = [];
+
+    foreach ($continuousData as $planData)
+    {
+      $result['x'][] = date(PlanController::DISPLAY_DATE_FORMAT, strtotime($planData->simple_date));
+    }
+    $dailyDeltaRegression  = Regression::getLinearRegressionData($dailyDeltas, $dailyDeltas->count());
+    foreach ($dailyDeltas as $dd)
+    {
+      $result['y'][] = $dd->data;
+    }
+    $result['label'] = 'Daily Delta';
+
+    echo json_encode($result);
+  }
+
   public function dataPull($planId)
   {
     Log::debug('data pull, plan id '.$planId);
@@ -98,10 +121,10 @@ class PlanController extends BehindLoginController
 
     $result = [];
 
-    foreach ($continuousDataSet as $date => $planData)
+    foreach ($continuousDataSet as $planData)
     {
-      $result['x'][] = date(PlanController::DISPLAY_DATE_FORMAT, strtotime($date));
-      if ($planData != null)
+      $result['x'][] = date(PlanController::DISPLAY_DATE_FORMAT, strtotime($planData->simple_date));
+      if ($planData->data != null)
       {
         $result['y'][] = $planData->data;
       }

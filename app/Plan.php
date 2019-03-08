@@ -65,11 +65,14 @@ class Plan extends Model
 				$planData = PlanData::where('simple_date', $dayCounter)->get();
 				if ($planData->count() === 1)
 				{
-					$dataSet[$dayCounter] = $planData->first();
+					$dataSet[] = $planData->first();
 				}
 				else
 				{
-					$dataSet[$dayCounter] = null;
+					$tmp = new PlanData();
+					$tmp->simple_date = $dayCounter;
+					$tmp->data = null;
+					$dataSet[] = $tmp;
 				}
 				$dayCounter = date('Y-m-d', strtotime($dayCounter . ' +1 day'));
 			}

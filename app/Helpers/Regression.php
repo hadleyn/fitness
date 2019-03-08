@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Facades\Log;
+
 class Regression
 {
   public static function dummy()
@@ -73,16 +75,18 @@ class Regression
 		$sums['xySum'] = 0;
 		$sums['x2Sum'] = 0;
 		$sums['y2Sum'] = 0;
-		$sortedPlanData = $data->sortBy('simple_date');
 
-		foreach ($sortedPlanData as $pd)
+		foreach ($data as $index => $pd)
 		{
-			$x = round((strtotime($pd->created_at) - strtotime($data->get(0)->created_at)) / 86400, 0);
-			$sums['xSum'] += $x;
-			$sums['ySum'] += (float)$pd->data;
-			$sums['xySum'] += ((float)$pd->data * $x);
-			$sums['x2Sum'] += pow($x, 2);
-			$sums['y2Sum'] += pow((float)$pd->data, 2);
+      if ($pd->data)
+      {
+  			$x = $index;
+  			$sums['xSum'] += $x;
+  			$sums['ySum'] += (float)$pd->data;
+  			$sums['xySum'] += ((float)$pd->data * $x);
+  			$sums['x2Sum'] += pow($x, 2);
+  			$sums['y2Sum'] += pow((float)$pd->data, 2);
+      }
 		}
 		return $sums;
   }

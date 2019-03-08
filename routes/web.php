@@ -32,6 +32,7 @@ Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
 Route::get('/plan/{planId}', 'PlanController@index')->name('plan');
 Route::post('/plan/addData', 'PlanController@addData');
 Route::get('/plan/{planId}/datapull', 'PlanController@dataPull');
+Route::get('/plan/{planId}/pullDailyDeltaData', 'PlanController@pullDailyDeltaData');
 Route::get('/plan/{planId}/rollingAverageDataPull', 'PlanController@rollingAverageDataPull');
 Route::get('/plan/{planId}/editDataPoint/{dataPointId}', 'PlanController@editDataPoint');
 Route::post('/plan/saveDataPointEdit/', 'PlanController@saveDataPointEdit');
