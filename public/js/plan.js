@@ -1,5 +1,5 @@
 var ctx;
-var myChart, dailyDeltaChart;
+var myChart, dailyDeltaChart, dailySlopeChart;
 
 $(document).ready( function(){
 
@@ -7,6 +7,7 @@ $(document).ready( function(){
     createCharts();
     pullDataToChart();
     pullDailyDeltaData();
+    pullDailySlopeData();
   }
 
   $('#dataPointEditSave').on('click', function(){
@@ -31,6 +32,28 @@ $(document).ready( function(){
 		toggleRollingAverage(this);
 	});
 });
+
+function pullDailySlopeData() {
+  $.ajax({
+    url: "/plan/"+$('#planId').val()+"/pullDailySlopeData",
+    type: "GET",
+    dataType : "json"
+  })
+  // Code to run if the request succeeds (is done);
+  // The response is passed to the function
+  .done(function( json ) {
+    console.log(json);
+    var datasets = [{
+          data: json.y,
+          borderColor: 'rgba(22, 34, 255, 0.9)',
+          backgroundColor: 'rgba(22, 34, 255, 0.9)',
+          fill: false,
+          label: json.label,
+          borderWidth: 2
+        }];
+    updateDailySlopeChart(json.x, datasets);
+  });
+}
 
 function pullDailyDeltaData() {
   $.ajax({
@@ -109,6 +132,16 @@ function createCharts() {
   });
   ctx = $('#dailyDeltaChart');
   dailyDeltaChart = new Chart(ctx, {
+  type: 'line',
+  data: {},
+  options: {
+      spanGaps: true,
+      responsive: true,
+      maintainAspectRatio: false
+    }
+  });
+  ctx = $('#dailySlopeChart');
+  dailySlopeChart = new Chart(ctx, {
   type: 'line',
   data: {},
   options: {
@@ -240,4 +273,10 @@ function updateDailyDeltaChart(labels, dataSets) {
   dailyDeltaChart.data.datasets = dataSets;
   dailyDeltaChart.data.labels = labels;
   dailyDeltaChart.update();
+}
+
+function updateDailySlopeChart(labels, dataSets) {
+  dailySlopeChart.data.datasets = dataSets;
+  dailySlopeChart.data.labels = labels;
+  dailySlopeChart.update();
 }

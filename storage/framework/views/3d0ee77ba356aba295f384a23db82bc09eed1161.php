@@ -17,6 +17,11 @@
     <canvas id="dailyDeltaChart" width="400" height="400"></canvas>
   </div>
 </div>
+<div class="chart-container row">
+	<div class="col">
+		<canvas id="dailySlopeChart" width="400" height="400"></canvas>
+	</div>
+</div>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('dataTable'); ?>

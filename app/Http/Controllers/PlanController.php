@@ -35,7 +35,6 @@ class PlanController extends BehindLoginController
     $viewData['dailyDeltas'] = $plan->plannable->getDailyDeltas();
     $viewData['slope'] = Regression::getSlope($plan->planData);
     $viewData['yIntercept'] = Regression::getYIntercept($plan->planData);
-    Log::debug('Daily slopes '.print_r($plan->plannable->getDailySlope(), TRUE));
 
     return view($plan->plannable->getPlanView(), $viewData);
 
@@ -89,6 +88,27 @@ class PlanController extends BehindLoginController
       $result['y'][] = $dataObj['average'];
     }
     $result['label'] = 'My Data';
+    echo json_encode($result);
+  }
+  
+  public function pullDailySlopeData($planId)
+  {
+    $plan = Plan::find($planId);
+    $continuousData = $plan->getContinuousDataSet();
+    $dailySlope = $plan->plannable->getDailySlope();
+
+    $result = [];
+
+    foreach ($continuousData as $planData)
+    {
+      $result['x'][] = date(PlanController::DISPLAY_DATE_FORMAT, strtotime($planData->simple_date));
+    }
+    foreach ($dailySlope as $ds)
+    {
+      $result['y'][] = $ds;
+    }
+    $result['label'] = 'Daily Slope';
+
     echo json_encode($result);
   }
 
