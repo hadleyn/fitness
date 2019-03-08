@@ -53,26 +53,30 @@ class Plan extends Model
 	*/
 	public function getContinuousDataSet()
 	{
-		$sortedPlanData = $this->planData->sortBy('simple_date');
-		$firstDate = $sortedPlanData->first()->simple_date;
-		$lastDate = $sortedPlanData->last()->simple_date;
-		$dayCounter = $firstDate;
-		$dataSet = [];
-		while (strtotime($dayCounter) <= strtotime($lastDate))
+		if ($this->planData->count() > 0)
 		{
-			$planData = PlanData::where('simple_date', $dayCounter)->get();
-			if ($planData->count() === 1)
+			$sortedPlanData = $this->planData->sortBy('simple_date');
+			$firstDate = $sortedPlanData->first()->simple_date;
+			$lastDate = $sortedPlanData->last()->simple_date;
+			$dayCounter = $firstDate;
+			$dataSet = [];
+			while (strtotime($dayCounter) <= strtotime($lastDate))
 			{
-				$dataSet[$dayCounter] = $planData->first();
+				$planData = PlanData::where('simple_date', $dayCounter)->get();
+				if ($planData->count() === 1)
+				{
+					$dataSet[$dayCounter] = $planData->first();
+				}
+				else
+				{
+					$dataSet[$dayCounter] = null;
+				}
+				$dayCounter = date('Y-m-d', strtotime($dayCounter . ' +1 day'));
 			}
-			else
-			{
-				$dataSet[$dayCounter] = null;
-			}
-			$dayCounter = date('Y-m-d', strtotime($dayCounter . ' +1 day'));
-		}
 
-		return collect($dataSet); //Return the collection, so this isn't an oddball result
+			return collect($dataSet); //Return the collection, so this isn't an oddball result
+		}
+		return collect(array());
 	}
 
 	public function getSlope()

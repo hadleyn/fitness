@@ -36,6 +36,7 @@
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-link active" id="nav-charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="nav-charts" aria-selected="true">Charts</a>
       <a class="nav-item nav-link" id="nav-tables-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="nav-tables" aria-selected="false">Tables</a>
+      <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#analysis" role="tab" aria-controls="nav-analysis" aria-selected="false">Analysis</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
@@ -51,10 +52,10 @@
         @yield('dataTable')
       </div>
     </div>
+    <div class="tab-pane fade" id="analysis" role="tabpanel" aria-labelledby="nav-analysis-tab">
+      @yield('planAnalysis')
+    </div>
   </div>
-
-
-  @yield('planAnalysis')
 
   <!-- Modals -->
   @include('plan.modals.editdatapoint')
