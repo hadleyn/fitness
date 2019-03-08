@@ -32,6 +32,8 @@ class PlanController extends BehindLoginController
     $viewData['plan'] = $plan;
     $viewData['continuousPlanData'] = $plan->getContinuousDataSet();
     $viewData['dailyDeltas'] = $plan->plannable->getDailyDeltas();
+    $viewData['slope'] = Regression::getSlope($plan->planData);
+    $viewData['yIntercept'] = Regression::getYIntercept($plan->planData);
 
     return view($plan->plannable->getPlanView(), $viewData);
 
@@ -110,7 +112,7 @@ class PlanController extends BehindLoginController
     }
 
     $result['label'] = 'My Data';
-    $result['regression'] = $plan->getLinearRegressionLine();
+    $result['regression'] = Regression::getLinearRegressionData($plan->planData, $plan->getDaysOnPlan());
     $result['expected'] = $plan->plannable->getExpectedLossData();
 
     echo json_encode($result);
@@ -120,7 +122,7 @@ class PlanController extends BehindLoginController
   {
     $planData = PlanData::find($dataPointId);
     $result['data'] = $planData->data;
-    $result['date'] = date('m/d/Y', strtotime($planData->created_at));
+    $result['date'] = date('m/d/Y', strtotime($planData->simple_date));
     $result['planDataId'] = $planData->id;
 
     echo json_encode($result);

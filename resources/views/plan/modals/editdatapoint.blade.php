@@ -20,7 +20,7 @@
             <div class="col"><input class="form-control" type="text" name="editData" id="editData" placeholder="Edit Data Point"></div>
           </div>
           <div class="row">
-            <div class="col"><input class="form-control" type="text" name="editDataDate" id="editDataDate" placeholder="Edit Data Date"></div>
+            <div class="col"><input class="form-control" type="text" readonly name="editDataDate" id="editDataDate" placeholder="Edit Data Date"></div>
           </div>
         </form>
       </div>

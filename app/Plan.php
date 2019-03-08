@@ -79,55 +79,6 @@ class Plan extends Model
 		return collect(array());
 	}
 
-	public function getSlope()
-	{
-		$sums = $this->calculateSums();
-		$n = $this->planData->count();
-
-		$m = 0;
-		if ($n > 1)
-		{
-			$m = $this->calculateM($n, $sums);
-		}
-
-		return $m;
-	}
-
-	public function getYIntercept()
-	{
-		$sums = $this->calculateSums();
-		$n = $this->planData->count();
-
-		$b = 0;
-		if ($n > 1)
-		{
-			$b = $this->calculateB($n, $sums);
-		}
-
-		return $b;
-	}
-
-	public function getLinearRegressionLine()
-	{
-		$sums = $this->calculateSums();
-		$n = $this->planData->count();
-
-		$result = [];
-		if ($n > 1)
-		{
-			$m = $this->calculateM($n, $sums);
-			$b = $this->calculateB($n, $sums);
-
-			$daysOnPlan = $this->getDaysOnPlan();
-			for ($i = 0; $i <= $daysOnPlan; $i++)
-			{
-				$result[] = ($m * $i) + $b;
-			}
-		}
-
-		return $result;
-	}
-
 	public function getRollingAverageDataSet($period = 7)
 	{
 		$continuousData = $this->getContinuousDataSet()->chunk($period);
@@ -148,45 +99,5 @@ class Plan extends Model
 		}
 
 		return $result;
-	}
-
-	private function calculateM($n, $sums)
-	{
-		$result = (($n * $sums['xySum']) - ($sums['xSum'] * $sums['ySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
-
-		return $result;
-	}
-
-	private function calculateB($n, $sums)
-	{
-		$result = (($sums['x2Sum'] * $sums['ySum']) - ($sums['xSum'] * $sums['xySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
-
-		return $result;
-	}
-
-	/**
-	*	X in all cases is time, so we'll need to normalize /**
-	* it as a unix timestamp. We'll then be able to translate
-	* it back into a real date at any time.
-	*/
-	private function calculateSums()
-	{
-		$sums['xSum'] = 0;
-		$sums['ySum'] = 0;
-		$sums['xySum'] = 0;
-		$sums['x2Sum'] = 0;
-		$sums['y2Sum'] = 0;
-		$sortedPlanData = $this->planData->sortBy('simple_date');
-
-		foreach ($sortedPlanData as $pd)
-		{
-			$x = round((strtotime($pd->created_at) - strtotime($this->planData->get(0)->created_at)) / 86400, 0);
-			$sums['xSum'] += $x;
-			$sums['ySum'] += (float)$pd->data;
-			$sums['xySum'] += ((float)$pd->data * $x);
-			$sums['x2Sum'] += pow($x, 2);
-			$sums['y2Sum'] += pow((float)$pd->data, 2);
-		}
-		return $sums;
 	}
 }
