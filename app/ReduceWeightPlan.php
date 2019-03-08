@@ -73,6 +73,35 @@ class ReduceWeightPlan extends Model
   		return $result;
     }
 
+    public function getDailyDeltas()
+    {
+      $continuousData = $this->plan->getContinuousDataSet();
+      $result = [];
+      foreach ($continuousData as $date => $planData)
+      {
+        $previousDay = date('Y-m-d', strtotime($date. ' -1 day'));
+        if ($continuousData->has($previousDay))
+        {
+          $previousDayPlanData = $continuousData->get($previousDay);
+          if ($previousDayPlanData && $planData)
+          {
+            $result[$date] = number_format($planData->data - $previousDayPlanData->data, 2);
+          }
+          else
+          {
+            $result[$date] = 'N/A';
+          }
+        }
+        else
+        {
+          //This should be the first day
+          $result[$date] = 'N/A';
+        }
+      }
+
+      return $result;
+    }
+
     public function getExpectedDataForDate($date)
     {
       $firstDate = $this->plan->planData->sortBy('simple_date')->first()->simple_date;
@@ -82,7 +111,7 @@ class ReduceWeightPlan extends Model
       $m = $this->getExpectedLossPerDay();
   		$result = ($m * $days) + $b;
 
-      return $result;
+      return number_format($result, 2);
     }
 
     public function getPredictedCompletionDate()

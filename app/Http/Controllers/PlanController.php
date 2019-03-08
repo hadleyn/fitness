@@ -30,7 +30,7 @@ class PlanController extends BehindLoginController
     $viewData['displayDateFormat'] = PlanController::DISPLAY_DATE_FORMAT;
     $viewData['plan'] = $plan;
     $viewData['continuousPlanData'] = $plan->getContinuousDataSet();
-    $viewData['expected'] = $plan->plannable->getExpectedLossData();
+    $viewData['dailyDeltas'] = $plan->plannable->getDailyDeltas();
 
     return view($plan->plannable->getPlanView(), $viewData);
 

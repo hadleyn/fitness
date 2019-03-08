@@ -26,12 +26,16 @@
         @if ($pd == null)
           <td>No Data</td>
           <td>{{ $plan->plannable->getExpectedDataForDate($date) }}</td>
-          <td>N/A</td>
+          <td>{{ $dailyDeltas[$date] }}</td>
           <td><a href="#" class="editDataPoint">Set Data?</a></td>
         @else
           <td>{{ $pd->data }}</td>
           <td>{{ $plan->plannable->getExpectedDataForDate($date) }}</td>
-          <td></td>
+          @if (is_numeric($dailyDeltas[$date]) && $dailyDeltas[$date] > 0)
+            <td class="table-warning">{{ $dailyDeltas[$date] }}</td>
+          @else
+            <td class="table-success">{{ $dailyDeltas[$date] }}</td>
+          @endif
           <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}">Edit</a></td>
         @endif
       </tr>
@@ -62,13 +66,13 @@
   	<div class="col">
   		Total Weight Lost: {{ $plan->plannable->getTotalWeightLost() }}
 	</div>
-	<div class="col">
+	<!-- <div class="col">
     <div>
       <label>
         <input id="toggleRollingAverage" type="checkbox" data-toggle="toggle">
         Toggle Rolling Average
       </label>
     </div>
-	</div>
+	</div> -->
 </div>
 @endsection

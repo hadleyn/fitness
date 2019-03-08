@@ -72,12 +72,7 @@ class Plan extends Model
 			$dayCounter = date('Y-m-d', strtotime($dayCounter . ' +1 day'));
 		}
 
-		return $dataSet;
-	}
-
-	public function getPredictedCompletionDate()
-	{
-		throw new InvalidPlanException('Plan is generic type. Use ->plannable to get specific plan type functions');
+		return collect($dataSet); //Return the collection, so this isn't an oddball result
 	}
 
 	public function getSlope()
@@ -131,7 +126,7 @@ class Plan extends Model
 
 	public function getRollingAverageDataSet($period = 7)
 	{
-		$continuousData = collect($this->getContinuousDataSet())->chunk($period);
+		$continuousData = $this->getContinuousDataSet()->chunk($period);
 
 		$result = [];
 		foreach ($continuousData as $dataChunk)
