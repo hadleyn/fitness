@@ -34,7 +34,11 @@
     </thead>
     <tbody>
       @foreach ($continuousPlanData as $index => $pd)
-      <tr>
+      @if ($pd->estimated)
+      	<tr class="table-info">
+      @else
+      	<tr>
+      @endif
         <th scope="row">{{ date($displayDateFormat, strtotime($pd->simple_date)) }}</th>
         @if ($pd->data == null)
           <td>No Data</td>

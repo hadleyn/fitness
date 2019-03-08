@@ -78,14 +78,14 @@ class Regression
 
 		foreach ($data as $index => $pd)
 		{
-      if ($pd->data)
-      {
-  			$sums['xSum'] += $index;
-  			$sums['ySum'] += (float)$pd->data;
-  			$sums['xySum'] += ((float)$pd->data * $index);
-  			$sums['x2Sum'] += pow($index, 2);
-  			$sums['y2Sum'] += pow((float)$pd->data, 2);
-      }
+	      if ($pd->data)
+	      {
+	  			$sums['xSum'] += $index;
+	  			$sums['ySum'] += (float)$pd->data;
+	  			$sums['xySum'] += ((float)$pd->data * $index);
+	  			$sums['x2Sum'] += pow($index, 2);
+	  			$sums['y2Sum'] += pow((float)$pd->data, 2);
+	      }
 		}
 		return $sums;
   }
@@ -103,9 +103,9 @@ class Regression
 
   private static function calculateB($n, $sums)
   {
-    $result = (($sums['x2Sum'] * $sums['ySum']) - ($sums['xSum'] * $sums['xySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
+  	$result = (($sums['x2Sum'] * $sums['ySum']) - ($sums['xSum'] * $sums['xySum'])) / (($n * $sums['x2Sum']) - ($sums['xSum'] * $sums['xSum']));
 
-		return $result;
+	return $result;
   }
 }
 

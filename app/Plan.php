@@ -60,18 +60,22 @@ class Plan extends Model
 			$lastDate = $sortedPlanData->last()->simple_date;
 			$dayCounter = $firstDate;
 			$dataSet = [];
+			$lastValidData = null;
 			while (strtotime($dayCounter) <= strtotime($lastDate))
 			{
 				$planData = PlanData::where('simple_date', $dayCounter)->get();
 				if ($planData->count() === 1)
 				{
-					$dataSet[] = $planData->first();
+					$lastValidData = $planData->first();
+					$dataSet[] = $lastValidData;
 				}
 				else
 				{
+					//If we're missing a data point, fill it with the last valid data point value and flag it
 					$tmp = new PlanData();
 					$tmp->simple_date = $dayCounter;
-					$tmp->data = null;
+					$tmp->data = $lastValidData->data;
+					$tmp->estimated = TRUE;
 					$dataSet[] = $tmp;
 				}
 				$dayCounter = date('Y-m-d', strtotime($dayCounter . ' +1 day'));

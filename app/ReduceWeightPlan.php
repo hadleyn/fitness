@@ -52,7 +52,7 @@ class ReduceWeightPlan extends Model
 
     public function getExpectedLossPerDay()
     {
-      //Definded as (goal weight - start weight) / (end date - start date)
+      //Defined as (goal weight - start weight) / (end date - start date)
       $weightLoss = $this->goal_weight - $this->starting_weight;
       $dateDiff = strtotime($this->goal_date) - strtotime($this->plan->start_date);
 
@@ -114,16 +114,13 @@ class ReduceWeightPlan extends Model
     public function getDailySlope()
     {
       $continuousData = $this->plan->getContinuousDataSet();
-      Log::debug('continuous data looks like '.print_r($continuousData->first(), TRUE));
-      Log::debug('raw data looks like '.print_r($this->plan->planData->first(), TRUE));
-      Log::debug('slice looks like '.print_r($continuousData->slice(0, 4), TRUE));
 
       $i = 1;
       $n = $continuousData->count();
       $result = [];
       while ($i < $n)
       {
-        $result[] = Regression::getSlope($this->plan->planData->slice(0, $i));
+        $result[] = Regression::getSlope($continuousData->slice(0, $i));
         $i++;
       }
 
