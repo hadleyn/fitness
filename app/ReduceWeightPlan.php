@@ -118,7 +118,7 @@ class ReduceWeightPlan extends Model
       $i = 1;
       $n = $continuousData->count();
       $result = [];
-      while ($i < $n)
+      while ($i <= $n)
       {
         $result[] = Regression::getSlope($continuousData->slice(0, $i));
         $i++;
