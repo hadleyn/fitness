@@ -90,7 +90,7 @@ class PlanController extends BehindLoginController
     $result['label'] = 'My Data';
     echo json_encode($result);
   }
-  
+
   public function pullDailySlopeData($planId)
   {
     $plan = Plan::find($planId);
@@ -117,6 +117,8 @@ class PlanController extends BehindLoginController
     $plan = Plan::find($planId);
     $continuousData = $plan->getContinuousDataSet();
     $dailyDeltas = $plan->plannable->getDailyDeltas();
+    $average = $dailyDeltas->avg('data');
+    $target = $plan->plannable->getExpectedLossPerDay();
 
     $result = [];
 
@@ -128,6 +130,8 @@ class PlanController extends BehindLoginController
     foreach ($dailyDeltas as $dd)
     {
       $result['y'][] = $dd->data;
+      $result['average'][] = $average;
+      $result['target'][] = $target;
     }
     $result['label'] = 'Daily Delta';
 

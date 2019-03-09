@@ -124,7 +124,7 @@ class ReduceWeightPlan extends Model
         $i++;
       }
 
-      return $result;
+      return collect($result);
     }
 
     public function getExpectedDataForDate($date)

@@ -72,7 +72,24 @@ function pullDailyDeltaData() {
           fill: false,
           label: json.label,
           borderWidth: 2
-        }];
+        },
+        {
+          data: json.average,
+          borderColor: 'rgba(204, 0, 0, 0.9)',
+          backgroundColor: 'rgba(204, 0, 0, 0.9)',
+          fill: false,
+          label: "Average",
+          borderWidth: 2
+        },
+        {
+          data: json.target,
+          borderColor: 'rgba(0, 0, 0, 0.9)',
+          backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          fill: false,
+          label: "Target",
+          borderWidth: 2
+        },
+      ];
     updateDailyDeltaChart(json.x, datasets);
   });
 }
