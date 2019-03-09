@@ -63,7 +63,7 @@ class Plan extends Model
 			$lastValidData = null;
 			while (strtotime($dayCounter) <= strtotime($lastDate))
 			{
-				$planData = PlanData::where('simple_date', $dayCounter)->get();
+				$planData = PlanData::where('simple_date', $dayCounter)->where('plan_id', $this->id)->get();
 				if ($planData->count() === 1)
 				{
 					$lastValidData = $planData->first();
