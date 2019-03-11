@@ -23,9 +23,11 @@ Auth::routes();
 
 //Dashboard
 Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
-Route::get('/dashboard/newplan', 'DashboardController@newPlan');
+// Route::get('/dashboard/newplan', 'DashboardController@newPlan');
 Route::get('/dashboard/newWeightReductionPlan', 'DashboardController@newWeightReductionPlan');
 Route::post('/dashboard/saveReduceWeightPlan', 'DashboardController@saveReduceWeightPlan');
+Route::get('/dashboard/newFatReductionPlan', 'DashboardController@newFatReductionPlan');
+Route::post('/dashboard/saveReduceFatPlan', 'DashboardController@saveReduceFatPlan');
 Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
 
 //Plan

@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\Log;
 
 use App\Helpers\Regression;
 use App\Rules\UserOwnsPlan;
+use App\IPlan;
 
-class ReduceWeightPlan extends Model
+class ReduceWeightPlan extends Model implements IPlan
 {
     public function plan()
     {
@@ -74,43 +75,6 @@ class ReduceWeightPlan extends Model
   		return $result;
     }
 
-    public function getDailyDeltas()
-    {
-      $continuousData = $this->plan->getContinuousDataSet();
-      $result = [];
-      foreach ($continuousData as $index => $planData)
-      {
-        if ($continuousData->has($index - 1))
-        {
-          $previousDayPlanData = $continuousData->get($index - 1);
-          if ($previousDayPlanData->data && $planData->data)
-          {
-            $resultData = new PlanData();
-            $resultData->data = number_format($planData->data - $previousDayPlanData->data, 2);
-            $resultData->simple_date = $planData->simple_date;
-            $result[] = $resultData;
-          }
-          else
-          {
-            $resultData = new PlanData();
-            $resultData->data = 'N/A';
-            $resultData->simple_date = $planData->simple_date;
-            $result[] = $resultData;
-          }
-        }
-        else
-        {
-          //This should be the first day
-          $resultData = new PlanData();
-          $resultData->data = 'N/A';
-          $resultData->simple_date = $planData->simple_date;
-          $result[] = $resultData;
-        }
-      }
-
-      return collect($result);
-    }
-
     public function getDailySlope()
     {
       $continuousData = $this->plan->getContinuousDataSet();
@@ -129,9 +93,9 @@ class ReduceWeightPlan extends Model
 
     public function getExpectedDataForDate($date)
     {
-      $firstDate = $this->plan->planData->sortBy('simple_date')->first()->simple_date;
+      $firstDate = $this->plan->start_date;
       $diff = strtotime($date) - strtotime($firstDate);
-      $days = round(($diff / (24 * 60 * 60)), 0);
+      $days = round(($diff / (24 * 60 * 60)), 0) - 1; //Not sure why this -1 has to be here.
       $b = $this->starting_weight;
       $m = $this->getExpectedLossPerDay();
   		$result = ($m * $days) + $b;
@@ -164,7 +128,7 @@ class ReduceWeightPlan extends Model
   		}
     }
 
-    public function validateReduceWeightData(\Illuminate\Http\Request $request)
+    public function validateData(\Illuminate\Http\Request $request)
     {
       //Validate the incoming data
       $request->validate([

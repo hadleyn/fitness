@@ -42,7 +42,7 @@ class Plan extends Model
 	{
 		$sortedPlanData = $this->planData->sortBy('simple_date');
 
-		$days = round((strtotime($sortedPlanData->last()->created_at) - strtotime($sortedPlanData->first()->created_at)) / 86400, 0);
+		$days = round((strtotime('now') - strtotime($this->start_date)) / 86400, 0);
 
 		return $days;
 	}
@@ -84,6 +84,43 @@ class Plan extends Model
 			return collect($dataSet); //Return the collection, so this isn't an oddball result
 		}
 		return collect(array());
+	}
+
+	public function getDailyDeltas()
+	{
+		$continuousData = $this->getContinuousDataSet();
+		$result = [];
+		foreach ($continuousData as $index => $planData)
+		{
+			if ($continuousData->has($index - 1))
+			{
+				$previousDayPlanData = $continuousData->get($index - 1);
+				if ($previousDayPlanData->data && $planData->data)
+				{
+					$resultData = new PlanData();
+					$resultData->data = number_format($planData->data - $previousDayPlanData->data, 2);
+					$resultData->simple_date = $planData->simple_date;
+					$result[] = $resultData;
+				}
+				else
+				{
+					$resultData = new PlanData();
+					$resultData->data = 'N/A';
+					$resultData->simple_date = $planData->simple_date;
+					$result[] = $resultData;
+				}
+			}
+			else
+			{
+				//This should be the first day
+				$resultData = new PlanData();
+				$resultData->data = 'N/A';
+				$resultData->simple_date = $planData->simple_date;
+				$result[] = $resultData;
+			}
+		}
+
+		return collect($result);
 	}
 
 	public function getRollingAverageDataSet($period = 7)

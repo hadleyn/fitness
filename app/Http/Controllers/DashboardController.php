@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 use App\Plan;
 use App\ReduceWeightPlan;
+use App\ReduceFatPlan;
 use App\User;
 use App\PlanType;
 use App\Rules\UserOwnsPlan;
@@ -35,6 +36,14 @@ class DashboardController extends BehindLoginController
 
 		//Load up the new plan form
 		return view('dashboard.weightreductionplanform', $viewData);
+	}
+
+	public function newFatReductionPlan()
+	{
+		$viewData['plan'] = new Plan;
+
+		//Load up the new plan form
+		return view('dashboard.fatreductionplanform', $viewData);
 	}
 
 	public function editPlan($planId)
@@ -96,4 +105,40 @@ class DashboardController extends BehindLoginController
 		return redirect()->route('dashboard');
 	}
 
+	public function saveReduceFatPlan(Request $request)
+	{
+		Log::debug('running plan validation');
+		$request->validate([
+    	'planName' => 'required|max:100',
+			'startingFatPercentage' => 'required|numeric|gt:0|lt:100',
+			'startDate' => 'required|date',
+			'goalDate' => 'required|date',
+			'planGoal' => 'required|numeric',
+			'planId' => new UserOwnsPlan
+		]);
+
+		Log::debug('made it past validation?');
+
+		$plan = new Plan;
+		$reduceFatPlan = new ReduceFatPlan;
+		if (!empty($request->planId))
+		{
+			$plan = Plan::find($request->planId);
+			$reduceFatPlan = $plan->plannable;
+		}
+
+		$reduceFatPlan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
+		$reduceFatPlan->goal_fat_percentage = $request->planGoal;
+		$reduceFatPlan->starting_fat_percentage = $request->startingFatPercentage;
+		$reduceFatPlan->save();
+
+    $plan->user_id = Auth::id();
+		$plan->name = $request->planName;
+		$plan->start_date = date('Y-m-d H:i:s', strtotime($request->startDate));
+		$plan->plannable_id = $reduceFatPlan->id;
+		$plan->plannable_type = 'App\ReduceFatPlan';
+    $plan->save();
+
+		return redirect()->route('dashboard');
+	}
 }

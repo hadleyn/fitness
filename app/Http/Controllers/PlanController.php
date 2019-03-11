@@ -32,7 +32,7 @@ class PlanController extends BehindLoginController
     $viewData['displayDateFormat'] = PlanController::DISPLAY_DATE_FORMAT;
     $viewData['plan'] = $plan;
     $viewData['continuousPlanData'] = $continuousData;
-    $viewData['dailyDeltas'] = $plan->plannable->getDailyDeltas();
+    $viewData['dailyDeltas'] = $plan->getDailyDeltas();
     $viewData['slope'] = Regression::getSlope($plan->planData);
     $viewData['yIntercept'] = Regression::getYIntercept($plan->planData);
 
@@ -213,7 +213,7 @@ class PlanController extends BehindLoginController
     $plan = Plan::find($request->planId);
     //First let's figure out what type of plan this is
 
-    $plan->plannable->validateReduceWeightData($request);
+    $plan->plannable->validateData($request);
 
     $dataPoint = new PlanData;
     $dataPoint->plan_id = $request->planId;
@@ -229,14 +229,6 @@ class PlanController extends BehindLoginController
     return redirect()->route('plan', ['planId' => $dataPoint->plan_id]);
   }
 
-  private function validateReduceWeightData(Request $request)
-  {
-    //Validate the incoming data
-    $request->validate([
-      'data' => 'required|numeric',
-      'planId' => new UserOwnsPlan
-    ]);
-  }
 
   private function validateSaveWeightDataEdit(Request $request)
   {
