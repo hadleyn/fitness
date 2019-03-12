@@ -116,7 +116,7 @@ class PlanController extends BehindLoginController
   {
     $plan = Plan::find($planId);
     $continuousData = $plan->getContinuousDataSet();
-    $dailyDeltas = $plan->plannable->getDailyDeltas();
+    $dailyDeltas = $plan->getDailyDeltas();
     $average = $dailyDeltas->avg('data');
     $target = $plan->plannable->getExpectedLossPerDay();
 

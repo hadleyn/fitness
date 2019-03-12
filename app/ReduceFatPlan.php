@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use App\IPlan;
+use App\Helpers\Regression;
 use App\Rules\UserOwnsPlan;
 
 class ReduceFatPlan extends Model implements IPlan
