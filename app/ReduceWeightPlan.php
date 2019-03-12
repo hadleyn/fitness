@@ -47,6 +47,16 @@ class ReduceWeightPlan extends Model implements IPlan
       return $this->starting_weight;
     }
 
+    public function getGoalValue()
+    {
+      return $this->goal_weight;
+    }
+
+    public function getGoalDate()
+    {
+      return $this->goal_date;
+    }
+
     public function getTotalWeightLost()
     {
       if ($this->plan->planData->count() > 0)
@@ -54,42 +64,6 @@ class ReduceWeightPlan extends Model implements IPlan
     	   return $this->plan->planData->last()->data - $this->starting_weight;
       }
       return 0;
-    }
-
-    public function getExpectedLossPerDay()
-    {
-      //Defined as (goal weight - start weight) / (end date - start date)
-      $weightLoss = $this->goal_weight - $this->starting_weight;
-      $dateDiff = strtotime($this->goal_date) - strtotime($this->plan->start_date);
-
-      return $weightLoss / round($dateDiff / (60 * 60 * 24), 0);
-    }
-
-    public function getExpectedLossData()
-    {
-      //This is similar to regression, except here we use the start weight as Y intercept
-      //and the expected loss per day as the slope.
-      $daysOnPlan = $this->plan->getDaysOnPlan();
-      $b = $this->starting_weight;
-      $m = $this->getExpectedLossPerDay();
-  		for ($i = 0; $i <= $daysOnPlan; $i++)
-  		{
-  			$result[] = ($m * $i) + $b;
-  		}
-
-  		return $result;
-    }
-
-    public function getExpectedDataForDate($date)
-    {
-      $firstDate = $this->plan->start_date;
-      $diff = strtotime($date) - strtotime($firstDate);
-      $days = round(($diff / (24 * 60 * 60)), 0) - 1; //Not sure why this -1 has to be here.
-      $b = $this->starting_weight;
-      $m = $this->getExpectedLossPerDay();
-  		$result = ($m * $days) + $b;
-
-      return number_format($result, 2);
     }
 
     public function getPredictedCompletionDate()

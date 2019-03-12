@@ -141,6 +141,42 @@ class Plan extends Model
 		return collect($result);
 	}
 
+	public function getExpectedDataForDate($date)
+	{
+		$firstDate = $this->start_date;
+		$diff = strtotime($date) - strtotime($firstDate);
+		$days = round(($diff / (24 * 60 * 60)), 0); //Not sure why this -1 has to be here.
+		$b = $this->plannable->getStartingValue();
+		$m = $this->getExpectedLossPerDay();
+		$result = ($m * $days) + $b;
+
+		return number_format($result, 2);
+	}
+
+	public function getExpectedLossData()
+	{
+		//This is similar to regression, except here we use the start weight as Y intercept
+		//and the expected loss per day as the slope.
+		$daysOnPlan = $this->getDaysOnPlan();
+		$b = $this->plannable->getStartingValue();
+		$m = $this->getExpectedLossPerDay();
+		for ($i = 0; $i <= $daysOnPlan; $i++)
+		{
+			$result[] = ($m * $i) + $b;
+		}
+
+		return $result;
+	}
+
+	public function getExpectedLossPerDay()
+  {
+    //Defined as (goal fat - start fat) / (end date - start date)
+    $loss = $this->plannable->getGoalValue() - $this->plannable->getStartingValue();
+    $dateDiff = strtotime($this->plannable->getGoalDate()) - strtotime($this->start_date);
+
+    return $loss / round($dateDiff / (60 * 60 * 24), 0);
+  }
+
 	public function getRollingAverageDataSet($period = 7)
 	{
 		$continuousData = $this->getContinuousDataSet()->chunk($period);

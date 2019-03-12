@@ -118,7 +118,7 @@ class PlanController extends BehindLoginController
     $continuousData = $plan->getContinuousDataSet();
     $dailyDeltas = $plan->getDailyDeltas();
     $average = $dailyDeltas->avg('data');
-    $target = $plan->plannable->getExpectedLossPerDay();
+    $target = $plan->getExpectedLossPerDay();
 
     $result = [];
 
@@ -161,7 +161,7 @@ class PlanController extends BehindLoginController
 
     $result['label'] = 'My Data';
     $result['regression'] = Regression::getLinearRegressionData($continuousDataSet, $plan->getDaysOnPlan());
-    $result['expected'] = $plan->plannable->getExpectedLossData();
+    $result['expected'] = $plan->getExpectedLossData();
 
     echo json_encode($result);
   }

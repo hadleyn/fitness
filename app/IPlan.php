@@ -20,13 +20,11 @@ interface IPlan {
 
   public function getStartingValue();
 
+  public function getGoalValue();
+
+  public function getGoalDate();
+
   public function getPredictedCompletionDate();
-
-  public function getExpectedLossPerDay();
-
-  public function getExpectedLossData();
-
-  public function getExpectedDataForDate($date);
 
   public function validateData(\Illuminate\Http\Request $request);
 

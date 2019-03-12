@@ -47,12 +47,12 @@
         <th scope="row">{{ date($displayDateFormat, strtotime($pd->simple_date)) }}</th>
         @if ($pd->data == null)
           <td>No Data</td>
-          <td>{{ $plan->plannable->getExpectedDataForDate($pd->simple_date) }}</td>
+          <td>{{ $plan->getExpectedDataForDate($pd->simple_date) }}</td>
           <td>{{ $dailyDeltas->get($index)->data }}</td>
           <td><a href="#" class="editDataPoint">Set Data?</a></td>
         @else
           <td>{{ $pd->data }}</td>
-          <td>{{ $plan->plannable->getExpectedDataForDate($pd->simple_date) }}</td>
+          <td>{{ $plan->getExpectedDataForDate($pd->simple_date) }}</td>
           <td>{{ $dailyDeltas->get($index)->data }}</td>
           <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}">Edit</a></td>
         @endif
@@ -69,7 +69,7 @@
     Slope (weight lost per day): {{ round($slope, 3) }}
   </div>
   <div class="col">
-    Expected Loss Per Day: {{ $plan->plannable->getExpectedLossPerDay() }}
+    Expected Loss Per Day: {{ $plan->getExpectedLossPerDay() }}
   </div>
   <div class="col">
     Y-Intercept: {{ $yIntercept }}
