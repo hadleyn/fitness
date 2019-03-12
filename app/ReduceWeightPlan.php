@@ -42,6 +42,11 @@ class ReduceWeightPlan extends Model implements IPlan
       return 'POUNDS';
     }
 
+    public function getStartingValue()
+    {
+      return $this->starting_weight;
+    }
+
     public function getTotalWeightLost()
     {
       if ($this->plan->planData->count() > 0)
@@ -73,22 +78,6 @@ class ReduceWeightPlan extends Model implements IPlan
   		}
 
   		return $result;
-    }
-
-    public function getDailySlope()
-    {
-      $continuousData = $this->plan->getContinuousDataSet();
-
-      $i = 1;
-      $n = $continuousData->count();
-      $result = [];
-      while ($i <= $n)
-      {
-        $result[] = Regression::getSlope($continuousData->slice(0, $i));
-        $i++;
-      }
-
-      return collect($result);
     }
 
     public function getExpectedDataForDate($date)

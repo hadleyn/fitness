@@ -40,6 +40,11 @@ class ReduceFatPlan extends Model implements IPlan
     return 'PERCENT';
   }
 
+  public function getStartingValue()
+  {
+    return $this->starting_fat_percentage;
+  }
+
   public function getPredictedCompletionDate()
   {
     if ($this->plan->planData->count() > 1)
@@ -72,6 +77,21 @@ class ReduceFatPlan extends Model implements IPlan
     $dateDiff = strtotime($this->goal_date) - strtotime($this->plan->start_date);
 
     return $fatLoss / round($dateDiff / (60 * 60 * 24), 0);
+  }
+
+  public function getExpectedLossData()
+  {
+    //This is similar to regression, except here we use the start weight as Y intercept
+    //and the expected loss per day as the slope.
+    $daysOnPlan = $this->plan->getDaysOnPlan();
+    $b = $this->starting_fat_percentage;
+    $m = $this->getExpectedLossPerDay();
+    for ($i = 0; $i <= $daysOnPlan; $i++)
+    {
+      $result[] = ($m * $i) + $b;
+    }
+
+    return $result;
   }
 
   public function getTotalFatLost()

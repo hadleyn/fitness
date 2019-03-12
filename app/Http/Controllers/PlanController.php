@@ -95,7 +95,7 @@ class PlanController extends BehindLoginController
   {
     $plan = Plan::find($planId);
     $continuousData = $plan->getContinuousDataSet();
-    $dailySlope = $plan->plannable->getDailySlope();
+    $dailySlope = $plan->getDailySlope();
 
     $result = [];
 

@@ -18,9 +18,13 @@ interface IPlan {
 
   public function getDataPointUnit();
 
+  public function getStartingValue();
+
   public function getPredictedCompletionDate();
 
   public function getExpectedLossPerDay();
+
+  public function getExpectedLossData();
 
   public function getExpectedDataForDate($date);
 

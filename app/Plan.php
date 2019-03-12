@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
+use App\Helpers\Regression;
 use App\Exceptions\InvalidPlanException;
 use App\PlanData;
 
@@ -40,8 +41,6 @@ class Plan extends Model
 	*/
 	public function getDaysOnPlan()
 	{
-		$sortedPlanData = $this->planData->sortBy('simple_date');
-
 		$days = round((strtotime('now') - strtotime($this->start_date)) / 86400, 0);
 
 		return $days;
@@ -56,11 +55,14 @@ class Plan extends Model
 		if ($this->planData->count() > 0)
 		{
 			$sortedPlanData = $this->planData->sortBy('simple_date');
-			$firstDate = $sortedPlanData->first()->simple_date;
+			$firstDate = $this->start_date;
 			$lastDate = $sortedPlanData->last()->simple_date;
 			$dayCounter = $firstDate;
 			$dataSet = [];
-			$lastValidData = null;
+			$lastValidData = new PlanData();
+			$lastValidData->simple_date = $this->start_date;
+			$lastValidData->data = $this->plannable->getStartingValue();
+			$lastValidData->estimated = TRUE;
 			while (strtotime($dayCounter) <= strtotime($lastDate))
 			{
 				$planData = PlanData::where('simple_date', $dayCounter)->where('plan_id', $this->id)->get();
@@ -118,6 +120,22 @@ class Plan extends Model
 				$resultData->simple_date = $planData->simple_date;
 				$result[] = $resultData;
 			}
+		}
+
+		return collect($result);
+	}
+
+	public function getDailySlope()
+	{
+		$continuousData = $this->getContinuousDataSet();
+
+		$i = 1;
+		$n = $continuousData->count();
+		$result = [];
+		while ($i <= $n)
+		{
+			$result[] = Regression::getSlope($continuousData->slice(0, $i));
+			$i++;
 		}
 
 		return collect($result);
