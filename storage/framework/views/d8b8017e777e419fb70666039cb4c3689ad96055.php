@@ -4,7 +4,9 @@
 	<p>Yo dawg I heard you like dashboards test change</p>
 	<?php if($plans->count() === 0): ?>
 		<p>:( You don't have any plans set up</p>
-		<a class="btn btn-primary" href="/dashboard/newplan">Create a Plan</a>
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newPlanChooserModal">
+		  Create New Plan
+		</button>
 	<?php else: ?>
 		<p>Here's a list of your plans</p>
 		<ul class="list-group">
@@ -12,7 +14,12 @@
 				<li class="list-group-item">
 					<a href="/plan/<?php echo e($p->id); ?>"><?php echo e($p->name); ?></a>
 					<a href="/dashboard/editplan/<?php echo e($p->id); ?>">Edit Plan</a>
-					<span>Expected Completion Date: <?php echo e($completionDate[$p->id]); ?></span>
+					<form method="POST" action="/plan/addData">
+						<?php echo csrf_field(); ?>
+						<input type="hidden" name="planId" value="<?php echo e($p->id); ?>">
+						<input type="text" name="data" placeholder="Data quick add...">
+					</form>
+					<span>Projected Completion Date: <?php echo e($completionDate[$p->id]); ?></span>
 					<?php if(strtotime($completionDate[$p->id]) <= strtotime($p->plannable->goal_date)): ?>
 						<span class="badge badge-success">On Track!</span>
 					<?php else: ?>
