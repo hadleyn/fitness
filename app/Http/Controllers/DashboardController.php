@@ -9,6 +9,7 @@ use Illuminate\Support\MessageBag;
 use App\Plan;
 use App\ReduceWeightPlan;
 use App\ReduceFatPlan;
+use App\GainMusclePlan;
 use App\User;
 use App\PlanType;
 use App\Rules\UserOwnsPlan;
@@ -44,6 +45,14 @@ class DashboardController extends BehindLoginController
 
 		//Load up the new plan form
 		return view('dashboard.fatreductionplanform', $viewData);
+	}
+
+	public function newMuscleGainPlan()
+	{
+		$viewData['plan'] = new Plan;
+
+		//Load up the new plan form
+		return view('dashboard.musclegainplanform', $viewData);
 	}
 
 	public function editPlan($planId)
@@ -113,7 +122,7 @@ class DashboardController extends BehindLoginController
 			'startingFatPercentage' => 'required|numeric|gt:0|lt:100',
 			'startDate' => 'required|date',
 			'goalDate' => 'required|date',
-			'planGoal' => 'required|numeric',
+			'planGoal' => 'required|numeric|gt:0|lt:100',
 			'planId' => new UserOwnsPlan
 		]);
 
@@ -137,6 +146,42 @@ class DashboardController extends BehindLoginController
 		$plan->start_date = date('Y-m-d H:i:s', strtotime($request->startDate));
 		$plan->plannable_id = $reduceFatPlan->id;
 		$plan->plannable_type = 'App\ReduceFatPlan';
+    $plan->save();
+
+		return redirect()->route('dashboard');
+	}
+
+	public function saveGainMusclePlan(Request $request)
+	{
+		$request->validate([
+    	'planName' => 'required|max:100',
+			'startingMusclePercentage' => 'required|numeric|gt:0|lt:100',
+			'startDate' => 'required|date',
+			'goalDate' => 'required|date',
+			'planGoal' => 'required|numeric|gt:0|lt:100',
+			'planId' => new UserOwnsPlan
+		]);
+
+		Log::debug('made it past validation?');
+
+		$plan = new Plan;
+		$reduceFatPlan = new GainMusclePlan;
+		if (!empty($request->planId))
+		{
+			$plan = Plan::find($request->planId);
+			$reduceFatPlan = $plan->plannable;
+		}
+
+		$reduceFatPlan->goal_date = date('Y-m-d H:i:s', strtotime($request->goalDate));
+		$reduceFatPlan->goal_muscle_percentage = $request->planGoal;
+		$reduceFatPlan->starting_muscle_percentage = $request->startingMusclePercentage;
+		$reduceFatPlan->save();
+
+    $plan->user_id = Auth::id();
+		$plan->name = $request->planName;
+		$plan->start_date = date('Y-m-d H:i:s', strtotime($request->startDate));
+		$plan->plannable_id = $reduceFatPlan->id;
+		$plan->plannable_type = 'App\GainMusclePlan';
     $plan->save();
 
 		return redirect()->route('dashboard');

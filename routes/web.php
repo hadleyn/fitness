@@ -28,6 +28,8 @@ Route::get('/dashboard/newWeightReductionPlan', 'DashboardController@newWeightRe
 Route::post('/dashboard/saveReduceWeightPlan', 'DashboardController@saveReduceWeightPlan');
 Route::get('/dashboard/newFatReductionPlan', 'DashboardController@newFatReductionPlan');
 Route::post('/dashboard/saveReduceFatPlan', 'DashboardController@saveReduceFatPlan');
+Route::get('/dashboard/newMuscleGainPlan', 'DashboardController@newMuscleGainPlan');
+Route::post('/dashboard/saveGainMusclePlan', 'DashboardController@saveGainMusclePlan');
 Route::get('/dashboard/editplan/{planId}', 'DashboardController@editPlan');
 
 //Plan
