@@ -40,12 +40,26 @@ class PlanController extends BehindLoginController
 
   }
 
+  public function confirmBulkDataImport(Request $request)
+  {
+    $planIds = $request->planIds;
+    $data = $request->data;
+    $simpleDates = $request->simpleDates;
+    $use = $request->checkToUse;
+    foreach ($planIds as $index => $iPlanId)
+    {
+      if (isset($use[$iPlanId]))
+      {
+        Log::debug("Found some data that we're going to use ".print_r($data))
+      }
+    }
+  }
+
   public function submitBulkDataUpload(Request $request)
   {
     $result['errors'] = [];
     try
     {
-      Log::debug('File incoming? '.print_r($request->bulkFile, TRUE));
       $path = $request->file('bulkFile')->store('tmp');
       $fileData = Storage::get($path);
       $lines = explode(PHP_EOL, $fileData);
@@ -56,15 +70,15 @@ class PlanController extends BehindLoginController
       Log::debug('parsed data '.print_r($parsedData, TRUE));
       //Discard the first item, it's a header row
       unset($parsedData[0]);
+      $unconfirmedData = [];
       foreach ($parsedData as $rawData)
       {
         $planData = new PlanData();
         $planData->plan_id = $request->planId;
         $planData->data = $rawData[1];
         $planData->simple_date = date('Y-m-d', strtotime($rawData[0]));
-        $planData->units = "POUNDS";
-        $planData->data_type = "DOUBLE";
-        $planData->save();
+        $unconfirmedData[] = ['importedData' => $planData,
+                              'existingData' => PlanData::getDataOnSimpleDate($planData->simple_date)];
       }
       Storage::delete($path);
     }
@@ -72,7 +86,9 @@ class PlanController extends BehindLoginController
     {
       $result['errors'][] = 'There was an error processing your file. Make sure it is correctly formatted';
     }
-    echo json_encode($result);
+
+    $viewData['unconfirmedData'] = $unconfirmedData;
+    return view('plan.bulkuploadconfirm', $viewData);
   }
 
   public function rollingAverageDataPull($planId)
