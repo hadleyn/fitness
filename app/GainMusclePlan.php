@@ -83,7 +83,7 @@ class GainMusclePlan extends Model implements IPlan
         $day++;
       }
 
-      return date('Y-m-d', strtotime('now +'.$day.' days'));
+      return date('Y-m-d', strtotime('+'.$day.' days', strtotime($this->plan->start_date)));
     }
     else
     {

@@ -20,7 +20,7 @@
 						<input type="hidden" name="planId" value="{{ $p->id }}">
 						<input type="text" name="data" placeholder="Data quick add...">
 					</form>
-					<span>Target Completion Date: {{ $p->goal_date }}</span>
+					<span>Target Completion Date: {{ $p->plannable->goal_date }}</span>
 					<span>Projected Completion Date: {{ $completionDate[$p->id] }}</span>
 					@if (strtotime($completionDate[$p->id]) <= strtotime($p->plannable->goal_date))
 						<span class="badge badge-success">On Track!</span>
