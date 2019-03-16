@@ -50,7 +50,7 @@ class PlanController extends BehindLoginController
     {
       if (isset($use[$iPlanId]))
       {
-        Log::debug("Found some data that we're going to use ".print_r($data))
+        Log::debug("Found some data that we're going to use ".print_r($data));
       }
     }
   }

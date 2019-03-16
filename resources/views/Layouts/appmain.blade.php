@@ -25,7 +25,10 @@
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
 		<a class="navbar-brand" href="/">Get Fit!</a>
-		<div class="collapse navbar-collapse">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
 					<a class="nav-link" href="/dashboard">Dashboard</a>
