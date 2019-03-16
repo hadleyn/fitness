@@ -14,7 +14,7 @@
 			@foreach ($plans as $p)
 				<li class="list-group-item">
 					<a href="/plan/{{ $p->id }}">{{ $p->name }}</a>
-					<a href="/dashboard/editplan/{{ $p->id }}">Edit Plan</a>
+					<a href="/dashboard/editplan/{{ $p->id }}"><span data-feather="edit"></span></a>
 					<form method="POST" action="/plan/addData">
 						@csrf
 						<input type="hidden" name="planId" value="{{ $p->id }}">

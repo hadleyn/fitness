@@ -17,14 +17,16 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
-  <link rel="stylesheet" href="{{ URL::asset('css/fitness.css') }}">
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <link rel="stylesheet" href="{{ URL::asset('css/fitness.css?t='.time()) }}">
   <script src="{{ URL::asset('js/plan.js?t='.time()) }}"></script>
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-		<a class="navbar-brand" href="/">Get Fit!</a>
+        <nav class="navbar navbar-expand-md fixed-top">
+		<a class="navbar-brand" href="/">Planit</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -78,5 +80,8 @@
         <p>Footer content</p>
       </div>
     </footer>-->
+    <script>
+      feather.replace()
+    </script>
   </body>
 </html>

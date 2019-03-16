@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="container">
-	<h1>Get Fit!</h1>
-        <p>Welcome to Get Fit! This app helps you to track your weight and fitness goals! TEST MESSAGE</p>
+	<h1>Planit!</h1>
+        <p>Welcome to Planit! Make a plan. Follow through. Meet your goals.</p>
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
 </div>
 @endsection
