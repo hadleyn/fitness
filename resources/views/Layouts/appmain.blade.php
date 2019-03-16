@@ -1,10 +1,10 @@
 <html>
     <head>
-	<meta charset="utf-8">
+	    <meta charset="utf-8">
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
     	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<title>Get Fit</title>
+	<title>TwoPaths</title>
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script   src="https://code.jquery.com/jquery-3.3.1.min.js"   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="   crossorigin="anonymous"></script>
@@ -26,7 +26,7 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-md fixed-top">
-		<a class="navbar-brand" href="/">Planit</a>
+		<a class="navbar-brand" href="/">TwoPaths</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
