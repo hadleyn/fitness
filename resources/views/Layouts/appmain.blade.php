@@ -25,7 +25,7 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-md fixed-top">
+        <nav class="navbar navbar-expand-md  navbar-light fixed-top">
 		<a class="navbar-brand" href="/">TwoPaths</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
