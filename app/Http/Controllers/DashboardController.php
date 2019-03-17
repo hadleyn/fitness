@@ -27,7 +27,9 @@ class DashboardController extends BehindLoginController
 		foreach ($plans as $p)
 		{
 			$viewData['completionDate'][$p->id] = $p->plannable->getPredictedCompletionDate();
+			$viewData['dataForToday'][$p->id] = $p->getPlanDataOnSimpleDate(date('Y-m-d'));
 		}
+		Log::debug("data for today ".print_r($viewData['dataForToday'], TRUE));
 
 		$viewData['plans'] = $plans;
 		return view('dashboard.dashboard', $viewData);

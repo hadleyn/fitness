@@ -35,6 +35,7 @@ class PlanController extends BehindLoginController
     $viewData['dailyDeltas'] = $plan->getDailyDeltas();
     $viewData['slope'] = Regression::getSlope($continuousData);
     $viewData['yIntercept'] = Regression::getYIntercept($continuousData);
+    $viewData['dataForToday'] = $plan->getPlanDataOnSimpleDate(date('Y-m-d'));
 
     return view($plan->plannable->getPlanView(), $viewData);
 

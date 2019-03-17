@@ -26,9 +26,13 @@ a:hover {
 }
 
 .btn-primary:hover {
-color: #f8f1ff;
-background-color: #1dad9d;
-border-color: #1dad9d;
+	color: #f8f1ff;
+	background-color: #1dad9d;
+	border-color: #1dad9d;
+}
+
+.emphasis {
+	font-weight: bold;
 }
 
 .chart-container {

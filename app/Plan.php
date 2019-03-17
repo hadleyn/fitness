@@ -193,4 +193,13 @@ class Plan extends Model
 
 		return $result;
 	}
+
+	public function getPlanDataOnSimpleDate($simpleDate)
+	{
+		$d = date('Y-m-d', strtotime($simpleDate));
+		$result = PlanData::where('simple_date', $d)
+												->where('plan_id', $this->id)->get()->first();
+
+    return $result;
+	}
 }
