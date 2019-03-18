@@ -24,4 +24,11 @@ class PlanData extends Model implements IPlanData
   {
     echo "Plan data is generic and has no units";
   }
+
+  public static function getDataOnSimpleDate($simpleDate)
+  {
+    $result = PlanData::where('simple_date', $simpleDate)->get()->first();
+
+    return $result;
+  }
 }

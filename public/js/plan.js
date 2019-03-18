@@ -23,9 +23,10 @@ $(document).ready( function(){
   });
 
   $('#bulkDataUploadSubmit').on('click', function(event){
-    //stop submit the form, we will post it manually.
-        event.preventDefault();
-        submitBulkDataUpload();
+    $('#bulkDataUploadForm').submit();
+      //stop submit the form, we will post it manually.
+      // event.preventDefault();
+      // submitBulkDataUpload();
     });
 
 	$('#toggleRollingAverage').on('click', function(){

@@ -2,8 +2,12 @@
 
 @section('addData')
 <div class="row">
-  <div class="col"><input class="form-control" type="text" name="data"  id="test" placeholder="Add a weight data point..."></div>
-  <div class="col"><input type="submit" class="btn btn-primary" value="Add Data"></div>
+  @if ($dataForToday)
+    <div class="col"><input class="form-control" type="text" name="data"  id="test" disabled="disabled" value="{{ $dataForToday->data }}"></div>
+  @else
+    <div class="col"><input class="form-control" type="text" name="data"  id="test" placeholder="Today's Weight Data Point..."></div>
+    <div class="col"><input type="submit" class="btn btn-primary" value="Add Data"></div>
+  @endif
 </div>
 @endsection
 
@@ -65,27 +69,17 @@
 
 @section('planAnalysis')
 <div class="row">
-  <div class="col">
-    Slope (weight lost per day): {{ round($slope, 3) }}
+  <div class="col-3">
+    <p>Slope (weight lost per day):</p>
+    <p>Expected Loss Per Day:</p>
+    <p>Y-Intercept:</p>
+    <p>Total Weight Lost:</p>
   </div>
-  <div class="col">
-    Expected Loss Per Day: {{ $plan->getExpectedLossPerDay() }}
+  <div class="col-9">
+    <p class="emphasis">{{ round($slope, 3) }}</p>
+    <p class="emphasis">{{ $plan->getExpectedLossPerDay() }}</p>
+    <p class="emphasis">{{ $yIntercept }}</p>
+    <p class="emphasis">{{ $plan->plannable->getTotalWeightLost() }}</p>
   </div>
-  <div class="col">
-    Y-Intercept: {{ $yIntercept }}
-  </div>
-</div>
-<div class="row">
-  	<div class="col">
-  		Total Weight Lost: {{ $plan->plannable->getTotalWeightLost() }}
-	</div>
-	<!-- <div class="col">
-    <div>
-      <label>
-        <input id="toggleRollingAverage" type="checkbox" data-toggle="toggle">
-        Toggle Rolling Average
-      </label>
-    </div>
-	</div> -->
 </div>
 @endsection

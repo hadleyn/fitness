@@ -19,6 +19,7 @@
 						<input type="hidden" name="planId" value="<?php echo e($p->id); ?>">
 						<input type="text" name="data" placeholder="Data quick add...">
 					</form>
+					<span>Target Completion Date: <?php echo e($p->plannable->goal_date); ?></span>
 					<span>Projected Completion Date: <?php echo e($completionDate[$p->id]); ?></span>
 					<?php if(strtotime($completionDate[$p->id]) <= strtotime($p->plannable->goal_date)): ?>
 						<span class="badge badge-success">On Track!</span>

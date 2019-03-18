@@ -69,20 +69,20 @@ class ReduceWeightPlan extends Model implements IPlan
     {
       if ($this->plan->planData->count() > 1)
   		{
+  			$completeData = $this->plan->getContinuousDataSet();
   			$day = 0;
-  			$m = Regression::getSlope($this->plan->planData);
-  			$b = Regression::getYIntercept($this->plan->planData);
+  			$m = Regression::getSlope($completeData);
+  			$b = Regression::getYIntercept($completeData);
   			if ($m >= 0 && $b > $this->goal_weight)
   			{
   				//Slope isn't pointing towards goal
   				return 'Will never reach goal';
   			}
-  			while (($m * $day) + $b > $this->goal_weight && $day < 32000)
+  			while (($m * $day) + $b >= $this->goal_weight && $day < 32000)
   			{
   				$day++;
   			}
-
-  			return date('Y-m-d', strtotime('now +'.$day.' days'));
+  			return date('Y-m-d', strtotime('+'.$day.' days', strtotime($this->plan->start_date)));
   		}
   		else
   		{

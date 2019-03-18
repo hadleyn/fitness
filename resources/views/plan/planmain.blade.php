@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-  <h1>{{ $plan->name }} <span class="badge badge-primary">{{ $plan->plannable->getPlanTypeDescription() }}</span></h1>
+  <h1>{{ $plan->name }}</h1>
 
   @if (count($continuousPlanData) === 0)
   <div class="alert alert-warning">

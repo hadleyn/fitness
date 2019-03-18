@@ -46,3 +46,7 @@ Route::get('/plan/{planId}/rollingAverageDataPull', 'PlanController@rollingAvera
 Route::get('/plan/{planId}/editDataPoint/{dataPointId}', 'PlanController@editDataPoint');
 Route::post('/plan/saveDataPointEdit/', 'PlanController@saveDataPointEdit');
 Route::post('/plan/submitBulkDataUpload', 'PlanController@submitBulkDataUpload');
+Route::post('/plan/confirmBulkDataImport', 'PlanController@confirmBulkDataImport');
+
+//Profile
+Route::get('/profile', 'ProfileController@index')->name('profile');

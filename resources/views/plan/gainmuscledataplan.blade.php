@@ -2,7 +2,12 @@
 
 @section('addData')
 <div class="row">
-  <div class="col"><input class="form-control" type="text" name="data" placeholder="Muscle Percentage Data Point..."></div>
+  @if ($dataForToday)
+    <div class="col"><input class="form-control" type="text" name="data"  id="test" disabled="disabled" value="{{ $dataForToday->data }}"></div>
+  @else
+    <div class="col"><input class="form-control" type="text" name="data"  id="test" placeholder="Today's Muscle Percentage Data Point..."></div>
+    <div class="col"><input type="submit" class="btn btn-primary" value="Add Data"></div>
+  @endif
 </div>
 @endsection
 
@@ -64,19 +69,17 @@
 
 @section('planAnalysis')
 <div class="row">
-  <div class="col">
-    Slope (% muscle gained per day): {{ round($slope, 3) }}
+  <div class="col-3">
+    <p>Slope (% muscle gained per day):</p>
+    <p>Expected Gain Per Day:</p>
+    <p>Y-Intercept:</p>
+    <p>Total Muscle Gained:</p>
   </div>
-  <div class="col">
-    Expected Loss Per Day: {{ $plan->getExpectedLossPerDay() }}
-  </div>
-  <div class="col">
-    Y-Intercept: {{ $yIntercept }}
-  </div>
-</div>
-<div class="row">
-  	<div class="col">
-  		Total Fat Lost: {{ $plan->plannable->getTotalMuscleGained() }}%
+  <div class="col-9 emphasis">
+    <p>{{ round($slope, 3) }}</p>
+    <p>{{ $plan->getExpectedLossPerDay() }}</p>
+    <p>{{ $yIntercept }}</p>
+    <p>{{ $plan->plannable->getTotalMuscleGained() }}%</p>
 	</div>
 	<!-- <div class="col">
     <div>
