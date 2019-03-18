@@ -17,6 +17,10 @@
 
 Route::get('/', 'MainController@index');
 
+Route::get('/_info', function(){
+  phpinfo();
+});
+
 Route::get('/hello', 'HelloController@index');
 
 Auth::routes();
