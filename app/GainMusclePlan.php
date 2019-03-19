@@ -76,12 +76,12 @@ class GainMusclePlan extends Model implements IPlan
       $day = 0;
       $m = Regression::getSlope($completeData);
       $b = Regression::getYIntercept($completeData);
-      if ($m >= 0 && $b > $this->goal_weight)
+      if ($m >= 0 && $b > $this->goal_muscle_percentage)
       {
         //Slope isn't pointing towards goal
         return 'Will never reach goal';
       }
-      while (($m * $day) + $b < $this->goal_weight && $day < 32000)
+      while (($m * $day) + $b < $this->goal_muscle_percentage && $day < 32000)
       {
         $day++;
       }
