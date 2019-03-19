@@ -243,8 +243,6 @@ class PlanController extends BehindLoginController
     $dataPoint->plan_id = $request->planId;
     $dataPoint->data = $request->data;
     $dataPoint->simple_date = date('Y-m-d');
-    $dataPoint->data_type = $plan->plannable->getDataPointType();
-    $dataPoint->units = $plan->plannable->getDataPointUnit();
 
     $dataPoint->save();
 
