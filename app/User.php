@@ -45,6 +45,11 @@ class User extends Authenticatable
 	     return $this->hasMany('App\Plan');
     }
 
+    public function userPreferences()
+    {
+      return $this->hasMany('App\UserPreference');
+    }
+
     public function doesUserOwnPlan($planId)
     {
       if (Plan::where('user_id', $this->id)

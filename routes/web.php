@@ -50,3 +50,4 @@ Route::post('/plan/confirmBulkDataImport', 'PlanController@confirmBulkDataImport
 
 //Profile
 Route::get('/profile', 'ProfileController@index')->name('profile');
+Route::post('/profile/saveUserPreferences', 'ProfileController@saveUserPreferences');
