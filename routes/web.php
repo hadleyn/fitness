@@ -43,7 +43,7 @@ Route::get('/plan/{planId}/datapull', 'PlanController@dataPull');
 Route::get('/plan/{planId}/pullDailyDeltaData', 'PlanController@pullDailyDeltaData');
 Route::get('/plan/{planId}/pullDailySlopeData', 'PlanController@pullDailySlopeData');
 Route::get('/plan/{planId}/rollingAverageDataPull', 'PlanController@rollingAverageDataPull');
-Route::get('/plan/{planId}/editDataPoint/{dataPointId}', 'PlanController@editDataPoint');
+Route::get('/plan/{planId}/editDataPoint/{dataPointId?}/{simpleDate?}', 'PlanController@editDataPoint');
 Route::post('/plan/saveDataPointEdit/', 'PlanController@saveDataPointEdit');
 Route::post('/plan/submitBulkDataUpload', 'PlanController@submitBulkDataUpload');
 Route::post('/plan/confirmBulkDataImport', 'PlanController@confirmBulkDataImport');

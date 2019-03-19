@@ -15,7 +15,7 @@ $(document).ready( function(){
   });
 
   $('.editDataPoint').on('click', function() {
-    editDataPoint($(this).data('id'));
+    editDataPoint($(this).data('id'), $(this).data('simpledate'));
   });
 
   $('#bulkDataUpload').on('click', function(){
@@ -188,9 +188,12 @@ function chartClicked(evt) {
   });
 }
 
-function editDataPoint(dataPointId) {
+function editDataPoint(dataPointId, simpleDate) {
+  if (dataPointId.length == 0) {
+    dataPointId = -1; //Invalid data point id
+  }
   $.ajax({
-    url: "/plan/"+$('#planId').val()+"/editDataPoint/"+dataPointId,
+    url: "/plan/"+$('#planId').val()+"/editDataPoint/"+dataPointId+"/"+simpleDate,
     type: "GET",
     dataType : "json"
   })
@@ -200,7 +203,6 @@ function editDataPoint(dataPointId) {
     $('#editDataDate').val(json.date);
     $('#planDataId').val(json.planDataId);
     $('#dataPointEditModal').modal('show');
-    $('#editDataDate').datepicker();
   });
 }
 

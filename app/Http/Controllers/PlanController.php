@@ -183,12 +183,21 @@ class PlanController extends BehindLoginController
     echo json_encode($result);
   }
 
-  public function editDataPoint($planId, $dataPointId)
+  public function editDataPoint($planId, $dataPointId, $simpleDate)
   {
     $planData = PlanData::find($dataPointId);
-    $result['data'] = $planData->data;
-    $result['date'] = date('m/d/Y', strtotime($planData->simple_date));
-    $result['planDataId'] = $planData->id;
+    if ($planData)
+    {
+      $result['data'] = $planData->data;
+      $result['date'] = date('m/d/Y', strtotime($planData->simple_date));
+      $result['planDataId'] = $planData->id;
+    }
+    else
+    {
+      $result['data'] = '';
+      $result['date'] = $simpleDate;
+      $result['planDataId'] = null;
+    }
 
     echo json_encode($result);
   }
@@ -196,21 +205,19 @@ class PlanController extends BehindLoginController
   public function saveDataPointEdit(Request $request)
   {
     $plan = Plan::find($request->planId);
-    //First let's figure out what type of plan this is
-    $planType = $plan->planType->id;
-    switch ($planType)
+    $errors = $plan->plannable->validateDataPointEdit($request);
+    $dataPoint = PlanData::find($request->planDataId);
+    if (!$dataPoint)
     {
-      case PlanType::REDUCE_WEIGHT:
-        $errors = $this->validateSaveWeightDataEdit($request);
-        $dataPoint = WeightPlanData::find($request->planDataId);
-        break;
+      $dataPoint = new PlanData;
+      $dataPoint->plan_id = $request->planId;
+      $dataPoint->simple_date = $request->editDataDate;
     }
 
     $result['errors'] = [];
     if (count($errors->all()) === 0)
     {
       $dataPoint->data = $request->editData;
-      $dataPoint->simple_date = date('Y-m-d', strtotime($request->editDataDate));
 
       $dataPoint->save();
     }
@@ -246,19 +253,4 @@ class PlanController extends BehindLoginController
     return redirect()->route('plan', ['planId' => $dataPoint->plan_id]);
   }
 
-
-  private function validateSaveWeightDataEdit(Request $request)
-  {
-    $errors = [];
-    $validator = Validator::make($request->all(), [
-      'editData' => 'required|numeric',
-      'editDataDate' => 'required|date',
-      'planId' => new UserOwnsPlan,
-      'planDataId' => new UserOwnsPlanData
-    ]);
-
-    $errors = $validator->errors();
-
-    return $errors;
-  }
 }

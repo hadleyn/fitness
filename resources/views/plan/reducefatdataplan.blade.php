@@ -49,16 +49,13 @@
       	<tr>
       @endif
         <th scope="row">{{ date($displayDateFormat, strtotime($pd->simple_date)) }}</th>
-        @if ($pd->data == null)
-          <td>No Data</td>
-          <td>{{ $plan->getExpectedDataForDate($pd->simple_date) }}</td>
-          <td>{{ $dailyDeltas->get($index)->data }}</td>
-          <td><a href="#" class="editDataPoint">Set Data?</a></td>
+        <td>{{ $pd->data }}</td>
+        <td>{{ $plan->getExpectedDataForDate($pd->simple_date) }}</td>
+        <td>{{ $dailyDeltas->get($index)->data }}</td>
+        @if ($pd->estimated)
+          <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}" data-simpledate="{{ $pd->simple_date }}">Set Data?</a></td>
         @else
-          <td>{{ $pd->data }}</td>
-          <td>{{ $plan->getExpectedDataForDate($pd->simple_date) }}</td>
-          <td>{{ $dailyDeltas->get($index)->data }}</td>
-          <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}">Edit</a></td>
+          <td><a href="#" class="editDataPoint" data-id="{{ $pd->id }}" data-simpledate="{{ $pd->simple_date }}">Edit</a></td>
         @endif
       </tr>
       @endforeach

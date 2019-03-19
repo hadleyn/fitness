@@ -2,11 +2,13 @@
 
 namespace App;
 
+use Validator;
 use Illuminate\Database\Eloquent\Model;
 
 use App\IPlan;
 use App\Helpers\Regression;
 use App\Rules\UserOwnsPlan;
+use App\Rules\UserOwnsPlanData;
 
 class ReduceFatPlan extends Model implements IPlan
 {
@@ -57,11 +59,12 @@ class ReduceFatPlan extends Model implements IPlan
 
   public function getPredictedCompletionDate()
   {
+    $completeData = $this->plan->getContinuousDataSet();
     if ($this->plan->planData->count() > 1)
     {
       $day = 0;
-      $m = Regression::getSlope($this->plan->planData);
-      $b = Regression::getYIntercept($this->plan->planData);
+      $m = Regression::getSlope($completeData);
+      $b = Regression::getYIntercept($completeData);
       if ($m >= 0 && $b > $this->goal_fat_percentage)
       {
         //Slope isn't pointing towards goal
@@ -96,5 +99,20 @@ class ReduceFatPlan extends Model implements IPlan
       'data' => 'required|numeric|gt:0|lt:100',
       'planId' => new UserOwnsPlan
     ]);
+  }
+
+  public function validateDataPointEdit(\Illuminate\Http\Request $request)
+  {
+    $errors = [];
+    $validator = Validator::make($request->all(), [
+      'editData' => 'required|numeric|gt:0|lt:100',
+      'editDataDate' => 'required|date',
+      'planId' => new UserOwnsPlan,
+      'planDataId' => new UserOwnsPlanData
+    ]);
+
+    $errors = $validator->errors();
+
+    return $errors;
   }
 }

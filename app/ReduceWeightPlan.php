@@ -2,11 +2,13 @@
 
 namespace App;
 
+use Validator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 use App\Helpers\Regression;
 use App\Rules\UserOwnsPlan;
+use App\Rules\UserOwnsPlanData;
 use App\IPlan;
 
 class ReduceWeightPlan extends Model implements IPlan
@@ -97,5 +99,20 @@ class ReduceWeightPlan extends Model implements IPlan
         'data' => 'required|numeric',
         'planId' => new UserOwnsPlan
       ]);
+    }
+
+    public function validateDataPointEdit(\Illuminate\Http\Request $request)
+    {
+      $errors = [];
+      $validator = Validator::make($request->all(), [
+        'editData' => 'required|numeric|gt:0|lt:100',
+        'editDataDate' => 'required|date',
+        'planId' => new UserOwnsPlan,
+        'planDataId' => new UserOwnsPlanData
+      ]);
+
+      $errors = $validator->errors();
+
+      return $errors;
     }
 }
