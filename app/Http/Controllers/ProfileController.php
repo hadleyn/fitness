@@ -17,7 +17,15 @@ class ProfileController extends Controller
     {
       //Get all preferences for this user
       $prefs = User::find(Auth::id())->userPreferences;
-      $viewData['timezone'] = $prefs->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first()->preference_value;
+      $tmp = $prefs->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
+      if ($tmp)
+      {
+        $viewData['timezone'] = $tmp->preference_value;
+      }
+      else
+      {
+        $viewData['timezone'] = 'America/New_York';
+      }
       return view('profile.profile', $viewData);
     }
 

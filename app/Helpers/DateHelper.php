@@ -22,12 +22,18 @@ class DateHelper
 
   public static function localTimestamp($format = 'Y-m-d h:i:s a')
   {
-    // $up = User::find(Auth::id())->userPreferences;
-    //
-    // $timezonePreference = $up->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
-    // return strtotime($timezonePreference->preference_value.' hours');
+    $up = User::find(Auth::id())->userPreferences;
 
-    $dt = new \DateTime("now", new \DateTimeZone('America/New_York'));
+    $timezonePreference = $up->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
+
+    if ($timezonePreference)
+    {
+      $dt = new \DateTime("now", new \DateTimeZone($timezonePreference->preference_value));
+    }
+    else
+    {
+      $dt = new \DateTime("now", new \DateTimeZone('America/New_York'));
+    }
 
     return $dt->format($format);
   }
