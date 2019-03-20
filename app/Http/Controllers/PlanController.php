@@ -242,7 +242,7 @@ class PlanController extends BehindLoginController
     $dataPoint = new PlanData;
     $dataPoint->plan_id = $request->planId;
     $dataPoint->data = $request->data;
-    $dataPoint->simple_date = date('Y-m-d');
+    $dataPoint->simple_date = DateHelper::localTimestamp('Y-m-d');
 
     $dataPoint->save();
 
