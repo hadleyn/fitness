@@ -38,9 +38,6 @@
 				<li class="nav-item">
 					<a class="nav-link" href="#">About</a>
 				</li>
-        <li class="nav-item">
-          Local Date/Time: {{ date('Y/m/d H:i:s', DateHelper::localTimestamp()) }}
-        </li>
 			</ul>
 			<!-- Right Side Of Navbar -->
                     	<ul class="navbar-nav ml-auto">
