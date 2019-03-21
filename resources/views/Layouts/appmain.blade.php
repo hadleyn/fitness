@@ -74,12 +74,18 @@
                     	</ul>
 		</div>
 	</nav>
-	@yield('content')
-    <!--<footer class="footer">
-      <div class="container">
-        <p>Footer content</p>
+  @if (Session::has('preferenceNotice'))
+    <div class="container">
+      <div class="alert alert-warning fade show" role="alert">
+        <span>{!! session('preferenceNotice') !!}</span>
       </div>
-    </footer>-->
+    </div>
+  @endif
+
+
+	@yield('content')
+
+
     <script>
       feather.replace()
     </script>

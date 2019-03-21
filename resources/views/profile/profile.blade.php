@@ -1,8 +1,8 @@
 @extends('Layouts.appmain')
 
+@section('content')
 <div class="container">
-  <h2>Your Profile</h2>
-  <p>Current Date Time: {{ DateHelper::localTimestamp() }}</p>
+  <h2>Profile and Preferences</h2>
   <form method="post" action="/profile/saveUserPreferences">
     @csrf
     <div class="form-group">
@@ -16,3 +16,4 @@
     </div>
   </form>
 </div>
+@endsection

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Helpers\Regression;
+use App\Helpers\DateHelper;
 
 use App\Plan;
 use App\PlanData;
@@ -35,7 +36,7 @@ class PlanController extends BehindLoginController
     $viewData['dailyDeltas'] = $plan->getDailyDeltas();
     $viewData['slope'] = Regression::getSlope($continuousData);
     $viewData['yIntercept'] = Regression::getYIntercept($continuousData);
-    $viewData['dataForToday'] = $plan->getPlanDataOnSimpleDate(date('Y-m-d'));
+    $viewData['dataForToday'] = $plan->getPlanDataOnSimpleDate(DateHelper::localTimestamp('Y-m-d'));
 
     return view($plan->plannable->getPlanView(), $viewData);
 
