@@ -20,7 +20,7 @@ class ProfileController extends Controller
       $tmp = $prefs->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
       if ($tmp)
       {
-        $viewData['timezone']['preference'] = $tmp->preference_value;
+        $viewData['timezone'] = $tmp->preference_value;
       }
       else
       {
@@ -35,9 +35,13 @@ class ProfileController extends Controller
       	'timezone' => 'required',
   		]);
 
-      $up = UserPreference::where('user_id', Auth::id())->where('preference_name', UserPreference::LOCAL_TIMEZONE);
-      $up->user_id = Auth::id();
-      $up->preference_name = UserPreference::LOCAL_TIMEZONE;
+      $up = UserPreference::where('user_id', Auth::id())->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
+      if (!$up)
+      {
+        $up = new UserPreference;
+        $up->user_id = Auth::id();
+        $up->preference_name = UserPreference::LOCAL_TIMEZONE;
+      }
       $up->preference_value = $request->timezone;
 
       $up->save();

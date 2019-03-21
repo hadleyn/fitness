@@ -19,11 +19,14 @@ class CheckUserPreferences
      */
     public function handle($request, Closure $next)
     {
-      $prefs = User::find(Auth::id())->userPreferences;
-      $tmp = $prefs->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
-      if (!$tmp)
+      $user = User::find(Auth::id());
+      if ($user)
       {
-        $request->session()->flash('preferenceNotice', 'Time zone preference has not been set. <a href="/profile">Set now</a> to avoid weirdness with data entry!');
+        $tmp = $user->userPreferences->where('preference_name', UserPreference::LOCAL_TIMEZONE)->first();
+        if (!$tmp)
+        {
+          $request->session()->flash('preferenceNotice', 'Time zone preference has not been set. <a href="/profile">Set now</a> to avoid weirdness with data entry!');
+        }
       }
       return $next($request);
     }
