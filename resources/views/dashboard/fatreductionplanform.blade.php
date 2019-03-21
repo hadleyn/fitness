@@ -1,5 +1,9 @@
 @extends('Layouts.appmain')
 
+@section('pageSpecificJS')
+<script src="{{ URL::asset('js/dashboard.js?t='.time()) }}"></script>
+@endsection
+
 @section('content')
 <div class="container">
   @if ($errors->any())
@@ -35,7 +39,7 @@
       @endif
     </div>
     <div class="form-group">
-      <label for="startDate">Goal Fat Percentage</label>
+      <label for="planGoal">Goal Fat Percentage</label>
       @if (empty($plan->id))
         <input type="text" class="form-control" id="planGoal" name="planGoal" value="{{ old('planGoal') }}">
       @else

@@ -21,7 +21,7 @@
 
   <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
   <link rel="stylesheet" href="{{ URL::asset('css/fitness.css?t='.time()) }}">
-  <script src="{{ URL::asset('js/plan.js?t='.time()) }}"></script>
+  @yield('pageSpecificJS')
 
     </head>
     <body>

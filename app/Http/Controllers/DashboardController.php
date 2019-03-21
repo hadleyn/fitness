@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 
+use App\Http\Requests\SaveReduceWeightPlan;
 use App\Plan;
 use App\Helpers\DateHelper;
 use App\ReduceWeightPlan;
@@ -81,18 +82,8 @@ class DashboardController extends BehindLoginController
 		return view($plan->plannable->getPlanForm(), $viewData);
 	}
 
-	public function saveReduceWeightPlan(Request $request)
+	public function saveReduceWeightPlan(SaveReduceWeightPlan $request)
 	{
-		Log::debug('running plan validation');
-		$request->validate([
-    	'planName' => 'required|max:100',
-			'startingWeight' => 'required|numeric',
-			'startDate' => 'required|date',
-			'goalDate' => 'required|date',
-			'planGoal' => 'required|numeric',
-			'planId' => new UserOwnsPlan
-		]);
-
 		Log::debug('made it past validation?');
 
 		$plan = new Plan;

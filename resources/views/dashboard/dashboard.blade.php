@@ -1,5 +1,9 @@
 @extends('Layouts.appmain')
 
+@section('pageSpecificJS')
+<script src="{{ URL::asset('js/dashboard.js?t='.time()) }}"></script>
+@endsection
+
 @section('content')
 <div class="container">
 	<div class="row">

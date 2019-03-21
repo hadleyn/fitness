@@ -1,5 +1,9 @@
 @extends('Layouts.appmain')
 
+@section('pageSpecificJS')
+<script src="{{ URL::asset('js/plan.js?t='.time()) }}"></script>
+@endsection
+
 @section('content')
 <div class="container">
   <h1>{{ $plan->name }}</h1>
