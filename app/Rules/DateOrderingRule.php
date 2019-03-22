@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class DateRules implements Rule
+class DateOrderingRule implements Rule
 {
 
     protected $startDate;

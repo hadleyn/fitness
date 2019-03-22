@@ -5,7 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 use App\Plan;
-use App\Rules\DateRules;
+use App\Rules\DateOrderingRule;
+use App\Rules\DataDateCollisionRule;
 
 class SaveReduceWeightPlan extends FormRequest
 {
@@ -37,7 +38,8 @@ class SaveReduceWeightPlan extends FormRequest
           'startDate' => 'required|date',
           'goalDate' => 'required|date',
           'planGoal' => 'required|numeric',
-          'startDate' => new DateRules($this->startDate, $this->goalDate)
+          'startDate' => new DateOrderingRule($this->startDate, $this->goalDate),
+          'startDate' => new DataDateCollisionRule($this->planId, $this->startDate, $this->goalDate)
         ];
     }
 }
