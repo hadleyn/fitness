@@ -6,14 +6,18 @@ use Illuminate\Contracts\Validation\Rule;
 
 class DateRules implements Rule
 {
+
+    protected $startDate;
+    protected $endDate;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($startDate, $endDate)
     {
-        //
+        $this->startDate = $startDate;
+        $this->$endDate = $endDate;
     }
 
     /**
@@ -25,7 +29,11 @@ class DateRules implements Rule
      */
     public function passes($attribute, $value)
     {
-        //
+        if (strtotime($this->startDate) > strtotime($this->endDate))
+        {
+          return FALSE;
+        }
+        return TRUE;
     }
 
     /**
@@ -35,6 +43,6 @@ class DateRules implements Rule
      */
     public function message()
     {
-        return 'The validation error message.';
+        return 'Start date must be before end date.';
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
 use App\Plan;
+use App\Rules\DateRules;
 
 class SaveReduceWeightPlan extends FormRequest
 {
@@ -35,7 +36,8 @@ class SaveReduceWeightPlan extends FormRequest
           'startingWeight' => 'required|numeric',
           'startDate' => 'required|date',
           'goalDate' => 'required|date',
-          'planGoal' => 'required|numeric'
+          'planGoal' => 'required|numeric',
+          'startDate' => new DateRules($this->startDate, $this->goalDate)
         ];
     }
 }
