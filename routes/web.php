@@ -47,6 +47,7 @@ Route::get('/plan/{planId}/editDataPoint/{dataPointId?}/{simpleDate?}', 'PlanCon
 Route::post('/plan/saveDataPointEdit/', 'PlanController@saveDataPointEdit');
 Route::post('/plan/submitBulkDataUpload', 'PlanController@submitBulkDataUpload');
 Route::post('/plan/confirmBulkDataImport', 'PlanController@confirmBulkDataImport');
+Route::post('/plan/deletePlan', 'PlanController@deletePlan');
 
 //Profile
 Route::get('/profile', 'ProfileController@index')->name('profile');

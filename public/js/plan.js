@@ -18,6 +18,14 @@ $(document).ready( function(){
     editDataPoint($(this).data('id'), $(this).data('simpledate'));
   });
 
+  $('#deletePlan').on('click', function() {
+    $('#deletePlanModal').modal('show');
+  });
+
+  $('#confirmDeletePlan').on('click', function() {
+    confirmDeletePlan();
+  });
+
   $('#bulkDataUpload').on('click', function(){
     $('#bulkDataUploadModal').modal('show');
   });
@@ -33,6 +41,23 @@ $(document).ready( function(){
 		toggleRollingAverage(this);
 	});
 });
+
+function confirmDeletePlan() {
+  $.ajax({
+    url: "/plan/deletePlan",
+    type: "POST",
+    dataType: "json",
+    data: $('#deletePlanForm').serialize()
+  }).done(function (data) {
+    window.location = "/dashboard";
+  }).fail(function (data) {
+    console.log("failure");
+    console.log(data.responseJSON.errors.deleteConfirm);
+    $(data.responseJSON.errors.deleteConfirm).each(function(index, errorMessage){
+      $("#deletePlanModal .modalAlerts").html("<p>"+errorMessage+"</p>");
+    });
+  });
+}
 
 function pullDailySlopeData() {
   $.ajax({

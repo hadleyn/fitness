@@ -18,6 +18,7 @@ use App\WeightPlanData;
 use App\User;
 use App\Rules\UserOwnsPlan;
 use App\Rules\UserOwnsPlanData;
+use App\Http\Requests\DeletePlan;
 
 class PlanController extends BehindLoginController
 {
@@ -39,7 +40,17 @@ class PlanController extends BehindLoginController
     $viewData['dataForToday'] = $plan->getPlanDataOnSimpleDate(DateHelper::localTimestamp('Y-m-d'));
 
     return view($plan->plannable->getPlanView(), $viewData);
+  }
 
+  public function deletePlan(DeletePlan $request)
+  {
+    Log::debug('trying to delete the plan. I think we passed validation by now');
+    $plan = Plan::find($request->planId);
+    Log::debug('plan to delete '.print_r($plan, TRUE));
+    $plan->plannable->delete();
+    $plan->delete();
+    $request->session()->flash('status', 'Plan successfully deleted.');
+    echo json_encode([]);
   }
 
   public function confirmBulkDataImport(Request $request)

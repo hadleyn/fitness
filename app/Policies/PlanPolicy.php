@@ -32,4 +32,17 @@ class PlanPolicy
     {
         return $user->id === $plan->user_id;
     }
+
+
+    /**
+     * Determine if the given plan can be deleted by the user.
+     *
+     * @param  \App\User  $user
+     * @param  \App\Plan  $plan
+     * @return bool
+     */
+    public function delete(User $user, Plan $plan)
+    {
+        return $user->id === $plan->user_id;
+    }
 }

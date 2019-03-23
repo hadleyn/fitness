@@ -80,3 +80,7 @@
   </div>
 </div>
 @endsection
+
+@section('planOperations')
+<a href="#" id="deletePlan">Delete Plan</a>
+@endsection

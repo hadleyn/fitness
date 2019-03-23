@@ -41,6 +41,7 @@
       <a class="nav-item nav-link active" id="nav-charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="nav-charts" aria-selected="true">Charts</a>
       <a class="nav-item nav-link" id="nav-tables-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="nav-tables" aria-selected="false">Tables</a>
       <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#analysis" role="tab" aria-controls="nav-analysis" aria-selected="false">Analysis</a>
+      <a class="nav-item nav-link" id="nav-operations-tab" data-toggle="tab" href="#operations" role="tab" aria-controls="nav-operations" aria-selected="false">Operations</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
@@ -55,11 +56,15 @@
     <div class="tab-pane fade" id="analysis" role="tabpanel" aria-labelledby="nav-analysis-tab">
       @yield('planAnalysis')
     </div>
+    <div class="tab-pane fade" id="operations" role="tabpanel" aria-labelledby="nav-operations-tab">
+      @yield('planOperations')
+    </div>
   </div>
 
   <!-- Modals -->
   @include('plan.modals.editdatapoint')
   @include('plan.modals.bulkupload')
+  @include('plan.modals.deleteplan')
 
 </div>
 @endsection
