@@ -42,6 +42,10 @@ class DataDateCollisionRule implements Rule
         Log::debug('first plan data date '.$this->startDate);
         $lastPlanData = $plan->planData->sortBy('simple_date')->last();
         Log::debug('last plan data date '.$this->goalDate);
+        if (!$firstPlanData)
+        {
+          return TRUE;
+        }
         if (strtotime($firstPlanData->simple_date) < strtotime($this->startDate))
         {
           return FALSE;

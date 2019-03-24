@@ -8,7 +8,7 @@ use App\Plan;
 use App\Rules\DateOrderingRule;
 use App\Rules\DataDateCollisionRule;
 
-class SaveReduceWeightPlan extends FormRequest
+class SaveReduceFatPlan extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,15 +33,15 @@ class SaveReduceWeightPlan extends FormRequest
     public function rules()
     {
         return [
-          'planName' => 'required|max:100',
-          'startingWeight' => 'required|numeric',
-          'startDate' => ['required',
+        	'planName' => 'required|max:100',
+    			'startingFatPercentage' => 'required|numeric|gt:0|lt:100',
+    			'startDate' => ['required',
                           'date',
                           new DateOrderingRule($this->startDate, $this->goalDate),
                           new DataDateCollisionRule($this->planId, $this->startDate, $this->goalDate)
                         ],
-          'goalDate' => 'required|date',
-          'planGoal' => 'required|numeric'
+    			'goalDate' => 'required|date',
+    			'planGoal' => 'required|numeric|gt:0|lt:100'
         ];
     }
 }

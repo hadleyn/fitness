@@ -3,6 +3,7 @@
 namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Facades\Log;
 
 class DateOrderingRule implements Rule
 {
@@ -29,6 +30,8 @@ class DateOrderingRule implements Rule
      */
     public function passes($attribute, $value)
     {
+      Log::debug('starting date '.strtotime($this->startDate));
+      Log::debug('end date '.strtotime($this->endDate));
         if (strtotime($this->startDate) > strtotime($this->endDate))
         {
           return FALSE;
@@ -43,6 +46,6 @@ class DateOrderingRule implements Rule
      */
     public function message()
     {
-        return 'Start date must be before end date.';
+        return 'Start date must be before goal date.';
     }
 }

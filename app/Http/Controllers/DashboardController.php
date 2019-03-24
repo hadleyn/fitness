@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\MessageBag;
 
 use App\Http\Requests\SaveReduceWeightPlan;
+use App\Http\Requests\SaveReduceFatPlan;
+use App\Http\Requests\SaveGainMusclePlan;
 use App\Plan;
 use App\Helpers\DateHelper;
 use App\ReduceWeightPlan;
@@ -108,18 +110,8 @@ class DashboardController extends BehindLoginController
 		return redirect()->route('dashboard');
 	}
 
-	public function saveReduceFatPlan(Request $request)
+	public function saveReduceFatPlan(SaveReduceFatPlan $request)
 	{
-		Log::debug('running plan validation');
-		$request->validate([
-    	'planName' => 'required|max:100',
-			'startingFatPercentage' => 'required|numeric|gt:0|lt:100',
-			'startDate' => 'required|date',
-			'goalDate' => 'required|date',
-			'planGoal' => 'required|numeric|gt:0|lt:100',
-			'planId' => new UserOwnsPlan
-		]);
-
 		Log::debug('made it past validation?');
 
 		$plan = new Plan;
@@ -145,17 +137,8 @@ class DashboardController extends BehindLoginController
 		return redirect()->route('dashboard');
 	}
 
-	public function saveGainMusclePlan(Request $request)
+	public function saveGainMusclePlan(SaveGainMusclePlan $request)
 	{
-		$request->validate([
-    	'planName' => 'required|max:100',
-			'startingMusclePercentage' => 'required|numeric|gt:0|lt:100',
-			'startDate' => 'required|date',
-			'goalDate' => 'required|date',
-			'planGoal' => 'required|numeric|gt:0|lt:100',
-			'planId' => new UserOwnsPlan
-		]);
-
 		Log::debug('made it past validation?');
 
 		$plan = new Plan;
