@@ -1,4 +1,8 @@
 <?php /* /var/www/html/fitness-dev/resources/views/dashboard/musclegainplanform.blade.php */ ?>
+<?php $__env->startSection('pageSpecificJS'); ?>
+<script src="<?php echo e(URL::asset('js/dashboard.js?t='.time())); ?>"></script>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="container">
   <?php if($errors->any()): ?>

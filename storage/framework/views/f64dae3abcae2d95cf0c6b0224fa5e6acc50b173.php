@@ -1,8 +1,12 @@
 <?php /* /var/www/html/fitness-dev/resources/views/plan/reducefatdataplan.blade.php */ ?>
 <?php $__env->startSection('addData'); ?>
 <div class="row">
-  <div class="col"><input class="form-control" type="text" name="data" placeholder="Fat Percentage Data Point..."></div>
-  <div class="col"><input type="submit" class="btn btn-primary" value="Add Data"></div>
+  <?php if($dataForToday): ?>
+    <div class="col"><input class="form-control" type="text" name="data"  id="test" disabled="disabled" value="<?php echo e($dataForToday->data); ?>"></div>
+  <?php else: ?>
+    <div class="col-8"><input class="form-control" type="text" name="data"  id="test" placeholder="Today's Fat Percentage Data Point..."></div>
+    <div class="col-4"><input type="submit" class="btn btn-primary" value="Add Data"></div>
+  <?php endif; ?>
 </div>
 <?php $__env->stopSection(); ?>
 
@@ -44,16 +48,13 @@
       	<tr>
       <?php endif; ?>
         <th scope="row"><?php echo e(date($displayDateFormat, strtotime($pd->simple_date))); ?></th>
-        <?php if($pd->data == null): ?>
-          <td>No Data</td>
-          <td><?php echo e($plan->getExpectedDataForDate($pd->simple_date)); ?></td>
-          <td><?php echo e($dailyDeltas->get($index)->data); ?></td>
-          <td><a href="#" class="editDataPoint">Set Data?</a></td>
+        <td><?php echo e($pd->data); ?></td>
+        <td><?php echo e($plan->getExpectedDataForDate($pd->simple_date)); ?></td>
+        <td><?php echo e($dailyDeltas->get($index)->data); ?></td>
+        <?php if($pd->estimated): ?>
+          <td><a href="#" class="editDataPoint" data-id="<?php echo e($pd->id); ?>" data-simpledate="<?php echo e($pd->simple_date); ?>">Set Data?</a></td>
         <?php else: ?>
-          <td><?php echo e($pd->data); ?></td>
-          <td><?php echo e($plan->getExpectedDataForDate($pd->simple_date)); ?></td>
-          <td><?php echo e($dailyDeltas->get($index)->data); ?></td>
-          <td><a href="#" class="editDataPoint" data-id="<?php echo e($pd->id); ?>">Edit</a></td>
+          <td><a href="#" class="editDataPoint" data-id="<?php echo e($pd->id); ?>" data-simpledate="<?php echo e($pd->simple_date); ?>">Edit</a></td>
         <?php endif; ?>
       </tr>
       <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -64,32 +65,23 @@
 
 <?php $__env->startSection('planAnalysis'); ?>
 <div class="row">
-  <div class="col">
-    Slope (% fat lost per day): <?php echo e(round($slope, 3)); ?>
-
+  <div class="col-3">
+    <p>Slope (% fat lost per day):</p>
+    <p>Expected Loss Per Day:</p>
+    <p>Y-Intercept:</p>
+    <p>Total Fat Lost:</p>
   </div>
-  <div class="col">
-    Expected Loss Per Day: <?php echo e($plan->getExpectedLossPerDay()); ?>
-
-  </div>
-  <div class="col">
-    Y-Intercept: <?php echo e($yIntercept); ?>
-
+  <div class="col-9 emphasis">
+    <p><?php echo e(round($slope, 3)); ?></p>
+    <p><?php echo e($plan->getExpectedLossPerDay()); ?></p>
+    <p><?php echo e($yIntercept); ?></p>
+  	<p><?php echo e($plan->plannable->getTotalFatLost()); ?>%</p>
   </div>
 </div>
-<div class="row">
-  	<div class="col">
-  		Total Fat Lost: <?php echo e($plan->plannable->getTotalFatLost()); ?>%
-	</div>
-	<!-- <div class="col">
-    <div>
-      <label>
-        <input id="toggleRollingAverage" type="checkbox" data-toggle="toggle">
-        Toggle Rolling Average
-      </label>
-    </div>
-	</div> -->
-</div>
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('planOperations'); ?>
+<a href="#" id="deletePlan">Delete Plan</a>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('plan.planmain', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>

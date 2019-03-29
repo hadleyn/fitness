@@ -12,7 +12,7 @@
         <div class="modalAlerts">
 
         </div>
-        <p>You are editing a data point. You can provide a new value as well as a new date for this data point.</p>
+        <p>You are editing a data point. If this is a derived data point, you are setting a new data value for the day shown.</p>
         <form id="editDataPointForm">
           <?php echo csrf_field(); ?>
           <input type="hidden" id="planDataId" name="planDataId" value="">

@@ -22,7 +22,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="bulkDataUploadSubmit" class="btn btn-primary">Save</button>
+        <button type="button" id="bulkDataUploadSubmit" class="btn btn-primary">Next</button>
       </div>
     </div>
   </div>

@@ -1,7 +1,11 @@
 <?php /* /var/www/html/fitness-dev/resources/views/plan/planmain.blade.php */ ?>
+<?php $__env->startSection('pageSpecificJS'); ?>
+<script src="<?php echo e(URL::asset('js/plan.js?t='.time())); ?>"></script>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
 <div class="container">
-  <h1><?php echo e($plan->name); ?> <span class="badge badge-primary"><?php echo e($plan->plannable->getPlanTypeDescription()); ?></span></h1>
+  <h1><?php echo e($plan->name); ?></h1>
 
   <?php if(count($continuousPlanData) === 0): ?>
   <div class="alert alert-warning">
@@ -36,6 +40,7 @@
       <a class="nav-item nav-link active" id="nav-charts-tab" data-toggle="tab" href="#charts" role="tab" aria-controls="nav-charts" aria-selected="true">Charts</a>
       <a class="nav-item nav-link" id="nav-tables-tab" data-toggle="tab" href="#tables" role="tab" aria-controls="nav-tables" aria-selected="false">Tables</a>
       <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#analysis" role="tab" aria-controls="nav-analysis" aria-selected="false">Analysis</a>
+      <a class="nav-item nav-link" id="nav-operations-tab" data-toggle="tab" href="#operations" role="tab" aria-controls="nav-operations" aria-selected="false">Operations</a>
     </div>
   </nav>
   <div class="tab-content" id="nav-tabContent">
@@ -50,11 +55,15 @@
     <div class="tab-pane fade" id="analysis" role="tabpanel" aria-labelledby="nav-analysis-tab">
       <?php echo $__env->yieldContent('planAnalysis'); ?>
     </div>
+    <div class="tab-pane fade" id="operations" role="tabpanel" aria-labelledby="nav-operations-tab">
+      <?php echo $__env->yieldContent('planOperations'); ?>
+    </div>
   </div>
 
   <!-- Modals -->
   <?php echo $__env->make('plan.modals.editdatapoint', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
   <?php echo $__env->make('plan.modals.bulkupload', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+  <?php echo $__env->make('plan.modals.deleteplan', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
 </div>
 <?php $__env->stopSection(); ?>

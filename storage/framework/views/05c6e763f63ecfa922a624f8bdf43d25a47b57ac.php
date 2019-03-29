@@ -1,11 +1,11 @@
 <?php /* /var/www/html/fitness-dev/resources/views/Layouts/appmain.blade.php */ ?>
 <html>
     <head>
-	<meta charset="utf-8">
+	    <meta charset="utf-8">
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1">
     	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-	<title>Get Fit</title>
+	<title>TwoPaths</title>
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script   src="https://code.jquery.com/jquery-3.3.1.min.js"   integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="   crossorigin="anonymous"></script>
@@ -18,15 +18,20 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
-  <link rel="stylesheet" href="<?php echo e(URL::asset('css/fitness.css')); ?>">
-  <script src="<?php echo e(URL::asset('js/plan.js?t='.time())); ?>"></script>
+  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <link rel="stylesheet" href="<?php echo e(URL::asset('css/fitness.css?t='.time())); ?>">
+  <?php echo $__env->yieldContent('pageSpecificJS'); ?>
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-		<a class="navbar-brand" href="/">Get Fit!</a>
-		<div class="collapse navbar-collapse">
+        <nav class="navbar navbar-expand-md  navbar-light fixed-top">
+		<a class="navbar-brand" href="/">TwoPaths</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item">
 					<a class="nav-link" href="/dashboard">Dashboard</a>
@@ -54,8 +59,8 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-				    <a class="dropdown-item" href="/profile">Profile</a>
-				    <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
+                      				    <a class="dropdown-item" href="/profile">Profile</a>
+                      				    <a class="dropdown-item" href="<?php echo e(route('logout')); ?>"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         <?php echo e(__('Logout')); ?>
@@ -71,11 +76,20 @@
                     	</ul>
 		</div>
 	</nav>
-	<?php echo $__env->yieldContent('content'); ?>
-    <!--<footer class="footer">
-      <div class="container">
-        <p>Footer content</p>
+  <?php if(Session::has('preferenceNotice')): ?>
+    <div class="container">
+      <div class="alert alert-warning fade show" role="alert">
+        <span><?php echo session('preferenceNotice'); ?></span>
       </div>
-    </footer>-->
+    </div>
+  <?php endif; ?>
+
+
+	<?php echo $__env->yieldContent('content'); ?>
+
+
+    <script>
+      feather.replace()
+    </script>
   </body>
 </html>
