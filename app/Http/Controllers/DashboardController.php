@@ -11,6 +11,7 @@ use App\Http\Requests\SaveReduceWeightPlan;
 use App\Http\Requests\SaveReduceFatPlan;
 use App\Http\Requests\SaveGainMusclePlan;
 use App\Plan;
+use App\CaloriePlan;
 use App\Helpers\DateHelper;
 use App\ReduceWeightPlan;
 use App\ReduceFatPlan;
@@ -59,6 +60,13 @@ class DashboardController extends BehindLoginController
 
 		//Load up the new plan form
 		return view('dashboard.musclegainplanform', $viewData);
+	}
+	
+	public function newCaloriePlan()
+	{
+		$viewData['plan'] = new CaloriePlan;
+		
+		return view('dashboard.calorieplanform', $viewData);
 	}
 
 	public function editPlan($planId)

@@ -15,8 +15,7 @@
           <a href="/dashboard/newWeightReductionPlan" class="list-group-item list-group-item-action">Weight Reduction Plan</a>
           <a href="/dashboard/newFatReductionPlan" class="list-group-item list-group-item-action">Fat Reduction Plan</a>
           <a href="/dashboard/newMuscleGainPlan" class="list-group-item list-group-item-action">Muscle Gain Plan</a>
-          <a href="#" class="list-group-item list-group-item-action">Weight Gain Plan</a>
-          <a href="#" class="list-group-item list-group-item-action">Workout Plan</a>
+          <a href="/dashboard/newCaloriePlan" class="list-group-item list-group-item-action">Calorie Plan</a>
         </div>
       </div>
     </div>
