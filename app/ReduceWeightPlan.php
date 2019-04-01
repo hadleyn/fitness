@@ -105,7 +105,7 @@ class ReduceWeightPlan extends Model implements IPlan
     {
       $errors = [];
       $validator = Validator::make($request->all(), [
-        'editData' => 'required|numeric|gt:0|lt:100',
+        'editData' => 'required|numeric',
         'editDataDate' => 'required|date',
         'planId' => new UserOwnsPlan,
         'planDataId' => new UserOwnsPlanData
