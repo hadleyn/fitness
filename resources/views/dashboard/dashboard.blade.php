@@ -66,6 +66,7 @@
 									@else
 										<p class="badge badge-danger">Will Never Meet Goal</p>
 									@endif
+									<p>Goal: {{ $p->plannable->getGoalValue() }}</p>
 							</div>
 						</div>
 					</div>

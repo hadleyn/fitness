@@ -65,6 +65,7 @@
 									<?php else: ?>
 										<p class="badge badge-danger">Will Never Meet Goal</p>
 									<?php endif; ?>
+									<p>Goal: <?php echo e($p->plannable->getGoalValue()); ?></p>
 							</div>
 						</div>
 					</div>
